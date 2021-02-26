@@ -33,4 +33,18 @@ describe('Benefit domain value object', () => {
     const benefitOrError = Benefit.create(benefitData);
     expect(benefitOrError).toEqual(left(new InvalidBenefitNameError(name)));
   });
+
+  test('should not create benefit with invalid name (null value)', () => {
+    const name = null;
+
+    const benefitData: BenefitData = {
+      name,
+      value: 10,
+      type: 'Food',
+      frequency: 'Daily',
+    };
+
+    const benefitOrError = Benefit.create(benefitData);
+    expect(benefitOrError).toEqual(left(new InvalidBenefitNameError(name)));
+  });
 });
