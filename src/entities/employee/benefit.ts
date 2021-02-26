@@ -1,6 +1,9 @@
 import { Either, left, right } from '../../shared/either';
 import { BenefitData } from './benefit-data';
-import { InvalidBenefitNameError } from './errors/invalid-benefit';
+import {
+  InvalidBenefitNameError,
+  InvalidBenefitValueError,
+} from './errors/invalid-benefit';
 
 export type BenefitType = 'Food' | 'Snack' | 'Transport' | 'Fuel';
 
@@ -21,9 +24,16 @@ export default class Benefit {
     value,
     type,
     frequency,
-  }: BenefitData): Either<InvalidBenefitNameError, Benefit> {
+  }: BenefitData): Either<
+    InvalidBenefitNameError | InvalidBenefitValueError,
+    Benefit
+  > {
     if (!Benefit.validateName(name)) {
       return left(new InvalidBenefitNameError(name));
+    }
+
+    if (!Benefit.validateValue(value)) {
+      return left(new InvalidBenefitValueError(value));
     }
 
     const benefit = new Benefit(name, value, type, frequency);
@@ -32,5 +42,9 @@ export default class Benefit {
 
   private static validateName(name: string): boolean {
     return name !== null && name.trim().length > 2 && name.trim().length < 255;
+  }
+
+  private static validateValue(value: number): boolean {
+    return value > 0;
   }
 }
