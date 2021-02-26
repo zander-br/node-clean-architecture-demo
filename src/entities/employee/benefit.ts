@@ -31,7 +31,6 @@ export default class Benefit {
   }
 
   private static validateName(name: string): boolean {
-    const nameLength = name.trim().length;
-    return nameLength > 2 && nameLength < 255;
+    return name !== null && name.trim().length > 2 && name.trim().length < 255;
   }
 }
