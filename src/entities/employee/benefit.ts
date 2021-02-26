@@ -46,11 +46,11 @@ export default class Benefit {
     return right(benefit);
   }
 
-  private static validateName(name: string): boolean {
+  private static validateName(name: string) {
     return name !== null && name.trim().length > 2 && name.trim().length < 255;
   }
 
-  private static validateValue(value: number): boolean {
+  private static validateValue(value: number) {
     return value > 0;
   }
 
