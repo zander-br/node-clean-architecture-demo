@@ -56,6 +56,7 @@ export default class Benefit {
 
   private static validateFrequency(frequency: Frequency, type: BenefitType) {
     if (type === 'Snack' && frequency !== 'Monthly') return false;
+    if (type === 'Fuel' && frequency !== 'Monthly') return false;
 
     return true;
   }
