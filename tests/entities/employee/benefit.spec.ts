@@ -1,7 +1,10 @@
 import Benefit from '../../../src/entities/employee/benefit';
 import { left } from '../../../src/shared/either';
 import { BenefitData } from '../../../src/entities/employee/benefit-data';
-import { InvalidBenefitNameError } from '../../../src/entities/employee/errors/invalid-benefit';
+import {
+  InvalidBenefitNameError,
+  InvalidBenefitValueError,
+} from '../../../src/entities/employee/errors/invalid-benefit';
 
 describe('Benefit domain value object', () => {
   test('should not create benefit with invalid name (too few characters)', () => {
@@ -46,5 +49,19 @@ describe('Benefit domain value object', () => {
 
     const benefitOrError = Benefit.create(benefitData);
     expect(benefitOrError).toEqual(left(new InvalidBenefitNameError(name)));
+  });
+
+  test('should not create benefit with invalid value (zero value)', () => {
+    const value = 0;
+
+    const benefitData: BenefitData = {
+      name: 'BOM',
+      value,
+      type: 'Food',
+      frequency: 'Daily',
+    };
+
+    const benefitOrError = Benefit.create(benefitData);
+    expect(benefitOrError).toEqual(left(new InvalidBenefitValueError(value)));
   });
 });
