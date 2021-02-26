@@ -1,9 +1,6 @@
+import BenefitBuilder from '../builders/benefit-builder';
 import { left } from '../../../src/shared/either';
-import { BenefitData } from '../../../src/entities/employee/benefit-data';
-import Benefit, {
-  BenefitType,
-  Frequency,
-} from '../../../src/entities/employee/benefit';
+import Benefit from '../../../src/entities/employee/benefit';
 import {
   InvalidBenefitFrequencyError,
   InvalidBenefitNameError,
@@ -12,118 +9,98 @@ import {
 
 describe('Benefit domain value object', () => {
   test('should not create benefit with invalid name (too few characters)', () => {
-    const name = 'A';
-    const benefitData: BenefitData = {
-      name,
-      value: 10,
-      type: 'Food',
-      frequency: 'Daily',
-    };
-    const benefitOrError = Benefit.create(benefitData);
+    const benefitDataWithFewCharactersInName = BenefitBuilder.aBenefit()
+      .withFewCharactersInName()
+      .build();
+    const benefitOrError = Benefit.create(benefitDataWithFewCharactersInName);
 
-    expect(benefitOrError).toEqual(left(new InvalidBenefitNameError(name)));
+    expect(benefitOrError).toEqual(
+      left(
+        new InvalidBenefitNameError(benefitDataWithFewCharactersInName.name),
+      ),
+    );
   });
 
   test('should not create benefit with invalid name (too many characters)', () => {
-    let name = '';
-    for (let i = 0; i < 256; i++) {
-      name += 'c';
-    }
+    const benefitDataWithManyCharactersInName = BenefitBuilder.aBenefit()
+      .withManyCharactersInName()
+      .build();
+    const benefitOrError = Benefit.create(benefitDataWithManyCharactersInName);
 
-    const benefitData: BenefitData = {
-      name,
-      value: 10,
-      type: 'Food',
-      frequency: 'Daily',
-    };
-
-    const benefitOrError = Benefit.create(benefitData);
-    expect(benefitOrError).toEqual(left(new InvalidBenefitNameError(name)));
+    expect(benefitOrError).toEqual(
+      left(
+        new InvalidBenefitNameError(benefitDataWithManyCharactersInName.name),
+      ),
+    );
   });
 
   test('should not create benefit with invalid name (null value)', () => {
-    const name = null;
+    const benefitDataWithNullValueInName = BenefitBuilder.aBenefit()
+      .withNullValueInName()
+      .build();
+    const benefitOrError = Benefit.create(benefitDataWithNullValueInName);
 
-    const benefitData: BenefitData = {
-      name,
-      value: 10,
-      type: 'Food',
-      frequency: 'Daily',
-    };
-
-    const benefitOrError = Benefit.create(benefitData);
-    expect(benefitOrError).toEqual(left(new InvalidBenefitNameError(name)));
+    expect(benefitOrError).toEqual(
+      left(new InvalidBenefitNameError(benefitDataWithNullValueInName.name)),
+    );
   });
 
   test('should not create benefit with invalid value (zero value)', () => {
-    const value = 0;
+    const benefitDataWithZeroValue = BenefitBuilder.aBenefit()
+      .withZeroValue()
+      .build();
 
-    const benefitData: BenefitData = {
-      name: 'BOM',
-      value,
-      type: 'Food',
-      frequency: 'Daily',
-    };
-
-    const benefitOrError = Benefit.create(benefitData);
-    expect(benefitOrError).toEqual(left(new InvalidBenefitValueError(value)));
+    const benefitOrError = Benefit.create(benefitDataWithZeroValue);
+    expect(benefitOrError).toEqual(
+      left(new InvalidBenefitValueError(benefitDataWithZeroValue.value)),
+    );
   });
 
   test('should not create benefit with invalid value (null value)', () => {
-    const value = null;
+    const benefitDataWithNullValue = BenefitBuilder.aBenefit()
+      .withNullValue()
+      .build();
 
-    const benefitData: BenefitData = {
-      name: 'BOM',
-      value,
-      type: 'Food',
-      frequency: 'Daily',
-    };
-
-    const benefitOrError = Benefit.create(benefitData);
-    expect(benefitOrError).toEqual(left(new InvalidBenefitValueError(value)));
+    const benefitOrError = Benefit.create(benefitDataWithNullValue);
+    expect(benefitOrError).toEqual(
+      left(new InvalidBenefitValueError(benefitDataWithNullValue.value)),
+    );
   });
 
   test('should not create benefit with invalid frequency (type snack)', () => {
-    const frequency: Frequency = 'Daily';
-    const type: BenefitType = 'Snack';
+    const benefitDataWithInvalidFrequencyForSnack = BenefitBuilder.aBenefit()
+      .withInvalidFrequencyForSnack()
+      .build();
 
-    const benefitData: BenefitData = {
-      name: 'VR Alimentação',
-      value: 10,
-      type,
-      frequency,
-    };
+    const benefitOrError = Benefit.create(
+      benefitDataWithInvalidFrequencyForSnack,
+    );
 
-    const benefitOrError = Benefit.create(benefitData);
+    const { frequency, type } = benefitDataWithInvalidFrequencyForSnack;
+
     expect(benefitOrError).toEqual(
       left(new InvalidBenefitFrequencyError(frequency, type)),
     );
   });
 
   test('should not create benefit with invalid frequency (type fuel)', () => {
-    const frequency: Frequency = 'Daily';
-    const type: BenefitType = 'Fuel';
+    const benefitDataWithInvalidFrequencyForFuel = BenefitBuilder.aBenefit()
+      .withInvalidFrequencyForFuel()
+      .build();
 
-    const benefitData: BenefitData = {
-      name: 'VR Auto',
-      value: 10,
-      type,
-      frequency,
-    };
+    const benefitOrError = Benefit.create(
+      benefitDataWithInvalidFrequencyForFuel,
+    );
 
-    const benefitOrError = Benefit.create(benefitData);
+    const { frequency, type } = benefitDataWithInvalidFrequencyForFuel;
+
     expect(benefitOrError).toEqual(
       left(new InvalidBenefitFrequencyError(frequency, type)),
     );
   });
 
   test('should create benefit with valid parameter', () => {
-    const benefitData: BenefitData = {
-      name: 'VR Refeição',
-      value: 30,
-      type: 'Food',
-      frequency: 'Daily',
-    };
+    const benefitData = BenefitBuilder.aBenefit().build();
 
     const benefitOrError = Benefit.create(benefitData);
     const benefit = benefitOrError.value as Benefit;
