@@ -1,7 +1,7 @@
 import { Either, left, right } from '../../shared/either';
 import { EmployeeData } from './employee-data';
 import { InvalidNameError } from './errors/invalid-name';
-import { Name } from './name';
+import Name from './name';
 
 export class Employee {
   public readonly name: Name;

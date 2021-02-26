@@ -1,6 +1,6 @@
 import { InvalidNameError } from '../../../src/entities/employee/errors/invalid-name';
-import { Name } from '../../../src/entities/employee/name';
-import { left, right } from '../../../src/shared/either';
+import Name from '../../../src/entities/employee/name';
+import { left } from '../../../src/shared/either';
 
 describe('Name domain value object', () => {
   test('should not create name with invalid parameter (too few characters)', () => {
