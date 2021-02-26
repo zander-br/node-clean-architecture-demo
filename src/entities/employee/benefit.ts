@@ -1,6 +1,7 @@
 import { Either, left, right } from '../../shared/either';
 import { BenefitData } from './benefit-data';
 import {
+  InvalidBenefitFrequencyError,
   InvalidBenefitNameError,
   InvalidBenefitValueError,
 } from './errors/invalid-benefit';
@@ -19,21 +20,26 @@ export default class Benefit {
     Object.freeze(this);
   }
 
-  static create({
-    name,
-    value,
-    type,
-    frequency,
-  }: BenefitData): Either<
-    InvalidBenefitNameError | InvalidBenefitValueError,
+  static create(
+    benefitData: BenefitData,
+  ): Either<
+    | InvalidBenefitNameError
+    | InvalidBenefitValueError
+    | InvalidBenefitFrequencyError,
     Benefit
   > {
+    const { name, value, type, frequency } = benefitData;
+
     if (!Benefit.validateName(name)) {
       return left(new InvalidBenefitNameError(name));
     }
 
     if (!Benefit.validateValue(value)) {
       return left(new InvalidBenefitValueError(value));
+    }
+
+    if (!Benefit.validateFrequency(frequency, type)) {
+      return left(new InvalidBenefitFrequencyError(frequency, type));
     }
 
     const benefit = new Benefit(name, value, type, frequency);
@@ -46,5 +52,11 @@ export default class Benefit {
 
   private static validateValue(value: number): boolean {
     return value > 0;
+  }
+
+  private static validateFrequency(frequency: Frequency, type: BenefitType) {
+    if (type === 'Snack' && frequency !== 'Monthly') return false;
+
+    return true;
   }
 }
