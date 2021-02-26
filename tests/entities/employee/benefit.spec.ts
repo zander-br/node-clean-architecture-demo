@@ -1,9 +1,9 @@
+import { left } from '../../../src/shared/either';
+import { BenefitData } from '../../../src/entities/employee/benefit-data';
 import Benefit, {
   BenefitType,
   Frequency,
 } from '../../../src/entities/employee/benefit';
-import { left } from '../../../src/shared/either';
-import { BenefitData } from '../../../src/entities/employee/benefit-data';
 import {
   InvalidBenefitFrequencyError,
   InvalidBenefitNameError,
@@ -115,5 +115,24 @@ describe('Benefit domain value object', () => {
     expect(benefitOrError).toEqual(
       left(new InvalidBenefitFrequencyError(frequency, type)),
     );
+  });
+
+  test('should create benefit with valid parameter', () => {
+    const benefitData: BenefitData = {
+      name: 'VR Refeição',
+      value: 30,
+      type: 'Food',
+      frequency: 'Daily',
+    };
+
+    const benefitOrError = Benefit.create(benefitData);
+    const benefit = benefitOrError.value as Benefit;
+
+    expect(benefitOrError.isRight()).toEqual(true);
+    expect(benefitOrError.value).toBeInstanceOf(Benefit);
+    expect(benefit.name).toEqual(benefitData.name);
+    expect(benefit.value).toEqual(benefitData.value);
+    expect(benefit.type).toEqual(benefitData.type);
+    expect(benefit.frequency).toEqual(benefitData.frequency);
   });
 });
