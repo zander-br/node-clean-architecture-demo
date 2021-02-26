@@ -1,7 +1,11 @@
-import Benefit from '../../../src/entities/employee/benefit';
+import Benefit, {
+  BenefitType,
+  Frequency,
+} from '../../../src/entities/employee/benefit';
 import { left } from '../../../src/shared/either';
 import { BenefitData } from '../../../src/entities/employee/benefit-data';
 import {
+  InvalidBenefitFrequencyError,
   InvalidBenefitNameError,
   InvalidBenefitValueError,
 } from '../../../src/entities/employee/errors/invalid-benefit';
@@ -77,5 +81,22 @@ describe('Benefit domain value object', () => {
 
     const benefitOrError = Benefit.create(benefitData);
     expect(benefitOrError).toEqual(left(new InvalidBenefitValueError(value)));
+  });
+
+  test('should not create benefit with invalid frequency (type snack)', () => {
+    const frequency: Frequency = 'Daily';
+    const type: BenefitType = 'Snack';
+
+    const benefitData: BenefitData = {
+      name: 'VR Alimentação',
+      value: 10,
+      type,
+      frequency,
+    };
+
+    const benefitOrError = Benefit.create(benefitData);
+    expect(benefitOrError).toEqual(
+      left(new InvalidBenefitFrequencyError(frequency, type)),
+    );
   });
 });
