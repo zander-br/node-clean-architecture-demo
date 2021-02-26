@@ -5,15 +5,32 @@ import { InvalidBenefitNameError } from '../../../src/entities/employee/errors/i
 
 describe('Benefit domain value object', () => {
   test('should not create benefit with invalid name (too few characters)', () => {
-    const value = 'A';
+    const name = 'A';
     const benefitData: BenefitData = {
-      name: 'A',
+      name,
       value: 10,
       type: 'Food',
       frequency: 'Daily',
     };
     const benefitOrError = Benefit.create(benefitData);
 
-    expect(benefitOrError).toEqual(left(new InvalidBenefitNameError(value)));
+    expect(benefitOrError).toEqual(left(new InvalidBenefitNameError(name)));
+  });
+
+  test('should not create benefit with invalid name (too many characters)', () => {
+    let name = '';
+    for (let i = 0; i < 256; i++) {
+      name += 'c';
+    }
+
+    const benefitData: BenefitData = {
+      name,
+      value: 10,
+      type: 'Food',
+      frequency: 'Daily',
+    };
+
+    const benefitOrError = Benefit.create(benefitData);
+    expect(benefitOrError).toEqual(left(new InvalidBenefitNameError(name)));
   });
 });
