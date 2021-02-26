@@ -99,4 +99,21 @@ describe('Benefit domain value object', () => {
       left(new InvalidBenefitFrequencyError(frequency, type)),
     );
   });
+
+  test('should not create benefit with invalid frequency (type fuel)', () => {
+    const frequency: Frequency = 'Daily';
+    const type: BenefitType = 'Fuel';
+
+    const benefitData: BenefitData = {
+      name: 'VR Auto',
+      value: 10,
+      type,
+      frequency,
+    };
+
+    const benefitOrError = Benefit.create(benefitData);
+    expect(benefitOrError).toEqual(
+      left(new InvalidBenefitFrequencyError(frequency, type)),
+    );
+  });
 });
