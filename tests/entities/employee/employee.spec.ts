@@ -80,4 +80,11 @@ describe('Employee domain entity', () => {
     const employee = employeeOrError.value as Employee;
     expect(employee.mealVoucherDiscount).toBe(false);
   });
+
+  test('should create employee with benefits empty', () => {
+    const employeeData = EmployeeBuilder.aEmployee().build();
+    const employeeOrError = Employee.create(employeeData);
+    const employee = employeeOrError.value as Employee;
+    expect(employee.benefits).toHaveLength(0);
+  });
 });
