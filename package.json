@@ -8,6 +8,7 @@
     "test:verbose": "jest --passWithNoTests --runInBand",
     "test:unit": "npm test -- --watch -c jest-unit-config.js",
     "test:staged": "npm test -- --findRelatedTests",
+    "test:ci": "npm test -- --coverage",
     "postinstall": "husky install"
   },
   "keywords": [],
