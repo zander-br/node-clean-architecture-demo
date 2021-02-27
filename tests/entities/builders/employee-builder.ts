@@ -15,6 +15,11 @@ export default class EmployeeBuilder {
     return this;
   }
 
+  public withInvalidContract(): EmployeeBuilder {
+    this.employee.contract = '';
+    return this;
+  }
+
   public build(): EmployeeData {
     return this.employee;
   }
