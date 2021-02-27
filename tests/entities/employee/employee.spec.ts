@@ -44,11 +44,22 @@ describe('Employee domain entity', () => {
   });
 
   test('should create employee with transportation voucher discount when not informed', () => {
-    const employeeWithoutTransportationVoucherDiscount = EmployeeBuilder.aEmployee().build();
+    const employeeWithTransportationVoucherDiscount = EmployeeBuilder.aEmployee().build();
+    const employeeOrError = Employee.create(
+      employeeWithTransportationVoucherDiscount,
+    );
+    const employee = employeeOrError.value as Employee;
+    expect(employee.transportationVoucherDiscount).toBe(true);
+  });
+
+  test('should create employee without transportation voucher discount when informed', () => {
+    const employeeWithoutTransportationVoucherDiscount = EmployeeBuilder.aEmployee()
+      .withoutTransportationVoucherDiscount()
+      .build();
     const employeeOrError = Employee.create(
       employeeWithoutTransportationVoucherDiscount,
     );
     const employee = employeeOrError.value as Employee;
-    expect(employee.transportationVoucherDiscount).toBe(true);
+    expect(employee.transportationVoucherDiscount).toBe(false);
   });
 });

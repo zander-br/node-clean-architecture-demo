@@ -25,6 +25,11 @@ export default class EmployeeBuilder {
     return this;
   }
 
+  public withoutTransportationVoucherDiscount(): EmployeeBuilder {
+    this.employee.transportationVoucherDiscount = false;
+    return this;
+  }
+
   public build(): EmployeeData {
     return this.employee;
   }
