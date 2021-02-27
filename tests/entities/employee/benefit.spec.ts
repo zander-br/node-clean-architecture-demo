@@ -14,6 +14,7 @@ describe('Benefit domain value object', () => {
       .build();
     const benefitOrError = Benefit.create(benefitWithFewCharactersInName);
 
+    expect(benefitOrError.isRight()).toBe(false);
     expect(benefitOrError).toEqual(
       left(new InvalidBenefitNameError(benefitWithFewCharactersInName.name)),
     );
@@ -25,6 +26,7 @@ describe('Benefit domain value object', () => {
       .build();
     const benefitOrError = Benefit.create(benefitWithManyCharactersInName);
 
+    expect(benefitOrError.isRight()).toBe(false);
     expect(benefitOrError).toEqual(
       left(new InvalidBenefitNameError(benefitWithManyCharactersInName.name)),
     );
@@ -36,6 +38,7 @@ describe('Benefit domain value object', () => {
       .build();
     const benefitOrError = Benefit.create(benefitWithNullValueInName);
 
+    expect(benefitOrError.isRight()).toBe(false);
     expect(benefitOrError).toEqual(
       left(new InvalidBenefitNameError(benefitWithNullValueInName.name)),
     );
@@ -47,6 +50,7 @@ describe('Benefit domain value object', () => {
       .build();
 
     const benefitOrError = Benefit.create(benefitWithZeroValue);
+    expect(benefitOrError.isRight()).toBe(false);
     expect(benefitOrError).toEqual(
       left(new InvalidBenefitValueError(benefitWithZeroValue.value)),
     );
@@ -58,6 +62,7 @@ describe('Benefit domain value object', () => {
       .build();
 
     const benefitOrError = Benefit.create(benefitWithNullValue);
+    expect(benefitOrError.isRight()).toBe(false);
     expect(benefitOrError).toEqual(
       left(new InvalidBenefitValueError(benefitWithNullValue.value)),
     );
@@ -72,6 +77,7 @@ describe('Benefit domain value object', () => {
 
     const { frequency, type } = benefitWithInvalidFrequencyForSnack;
 
+    expect(benefitOrError.isRight()).toBe(false);
     expect(benefitOrError).toEqual(
       left(new InvalidBenefitFrequencyError(frequency, type)),
     );
@@ -83,9 +89,9 @@ describe('Benefit domain value object', () => {
       .build();
 
     const benefitOrError = Benefit.create(benefitWithInvalidFrequencyForFuel);
-
     const { frequency, type } = benefitWithInvalidFrequencyForFuel;
 
+    expect(benefitOrError.isRight()).toBe(false);
     expect(benefitOrError).toEqual(
       left(new InvalidBenefitFrequencyError(frequency, type)),
     );
@@ -98,6 +104,7 @@ describe('Benefit domain value object', () => {
     const benefit = benefitOrError.value as Benefit;
 
     expect(benefitOrError.isRight()).toEqual(true);
+    expect(benefitOrError.isLeft()).toEqual(false);
     expect(benefitOrError.value).toBeInstanceOf(Benefit);
     expect(benefit.name).toEqual(benefit.name);
     expect(benefit.value).toEqual(benefit.value);
