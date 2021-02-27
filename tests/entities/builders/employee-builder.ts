@@ -30,6 +30,11 @@ export default class EmployeeBuilder {
     return this;
   }
 
+  public withoutMealVoucherDiscount(): EmployeeBuilder {
+    this.employee.mealVoucherDiscount = false;
+    return this;
+  }
+
   public build(): EmployeeData {
     return this.employee;
   }
