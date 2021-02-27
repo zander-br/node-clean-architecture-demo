@@ -62,4 +62,11 @@ describe('Employee domain entity', () => {
     const employee = employeeOrError.value as Employee;
     expect(employee.transportationVoucherDiscount).toBe(false);
   });
+
+  test('should create employee with meal voucher discount when not informed', () => {
+    const employeeWithMealVoucherDiscount = EmployeeBuilder.aEmployee().build();
+    const employeeOrError = Employee.create(employeeWithMealVoucherDiscount);
+    const employee = employeeOrError.value as Employee;
+    expect(employee.mealVoucherDiscount).toBe(true);
+  });
 });
