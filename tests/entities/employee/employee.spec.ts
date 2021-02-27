@@ -33,4 +33,13 @@ describe('Employee domain entity', () => {
     const employee = employeeOrError.value as Employee;
     expect(employee.medicalLeave).toBe(false);
   });
+
+  test('should create employee with medical leave when informed', () => {
+    const employeeWithMedicalLeave = EmployeeBuilder.aEmployee()
+      .withMedicalLeave()
+      .build();
+    const employeeOrError = Employee.create(employeeWithMedicalLeave);
+    const employee = employeeOrError.value as Employee;
+    expect(employee.medicalLeave).toBe(true);
+  });
 });

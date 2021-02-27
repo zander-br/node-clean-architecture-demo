@@ -20,6 +20,11 @@ export default class EmployeeBuilder {
     return this;
   }
 
+  public withMedicalLeave(): EmployeeBuilder {
+    this.employee.medicalLeave = true;
+    return this;
+  }
+
   public build(): EmployeeData {
     return this.employee;
   }
