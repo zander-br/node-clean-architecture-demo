@@ -3,7 +3,7 @@ import { EmployeeData } from './employee-data';
 import { InvalidNameError } from './errors/invalid-name';
 import Name from './name';
 
-export class Employee {
+export default class Employee {
   public readonly name: Name;
 
   private constructor(name: Name) {

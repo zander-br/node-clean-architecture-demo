@@ -2,10 +2,7 @@ import { Either, left, right } from '../../shared/either';
 import { InvalidNameError } from './errors/invalid-name';
 
 export default class Name {
-  private readonly name: string;
-
-  private constructor(name: string) {
-    this.name = name;
+  private constructor(private readonly name: string) {
     Object.freeze(this);
   }
 
