@@ -11,6 +11,7 @@ describe('Employee domain entity', () => {
       .build();
 
     const employeeOrError = Employee.create(employeeWithInvalidName);
+    expect(employeeOrError.isRight()).toBe(false);
     expect(employeeOrError).toEqual(
       left(new InvalidNameError(employeeWithInvalidName.name)),
     );
@@ -22,6 +23,7 @@ describe('Employee domain entity', () => {
       .build();
 
     const employeeOrError = Employee.create(employeeWithInvalidContract);
+    expect(employeeOrError.isRight()).toBe(false);
     expect(employeeOrError).toEqual(
       left(new InvalidContractError(employeeWithInvalidContract.contract)),
     );
