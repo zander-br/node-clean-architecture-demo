@@ -6,6 +6,7 @@ describe('Name domain value object', () => {
   test('should not create name with invalid parameter (too few characters)', () => {
     const value = 'A';
     const name = Name.create(value);
+    expect(name.isRight()).toBe(false);
     expect(name).toEqual(left(new InvalidNameError(value)));
   });
 
@@ -16,12 +17,14 @@ describe('Name domain value object', () => {
     }
 
     const name = Name.create(value);
+    expect(name.isRight()).toBe(false);
     expect(name).toEqual(left(new InvalidNameError(value)));
   });
 
   test('should not create name with invalid parameter (only blank spaces)', () => {
     const value = '   ';
     const name = Name.create(value);
+    expect(name.isRight()).toBe(false);
     expect(name).toEqual(left(new InvalidNameError(value)));
   });
 
@@ -29,6 +32,7 @@ describe('Name domain value object', () => {
     const value = 'Anderson Santos';
     const nameOrError = Name.create(value);
     const name = nameOrError.value as Name;
+    expect(nameOrError.isLeft()).toEqual(false);
     expect(nameOrError.isRight()).toEqual(true);
     expect(nameOrError.value).toBeInstanceOf(Name);
     expect(name.value).toEqual(value);
