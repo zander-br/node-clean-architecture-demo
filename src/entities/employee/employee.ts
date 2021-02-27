@@ -1,4 +1,5 @@
 import { Either, left, right } from '../../shared/either';
+import Benefit from './benefit';
 import Contract from './contract';
 import { EmployeeData } from './employee-data';
 import { InvalidContractError } from './errors/invalid-contract';
@@ -6,6 +7,8 @@ import { InvalidNameError } from './errors/invalid-name';
 import Name from './name';
 
 export default class Employee {
+  readonly #benefits: Benefit[];
+
   private constructor(
     readonly name: Name,
     readonly contract: Contract,
@@ -13,6 +16,7 @@ export default class Employee {
     readonly transportationVoucherDiscount: boolean = true,
     readonly mealVoucherDiscount: boolean = true,
   ) {
+    this.#benefits = [];
     Object.freeze(this);
   }
 
@@ -36,5 +40,9 @@ export default class Employee {
         employeeData.mealVoucherDiscount,
       ),
     );
+  }
+
+  get benefits(): Benefit[] {
+    return this.#benefits;
   }
 }
