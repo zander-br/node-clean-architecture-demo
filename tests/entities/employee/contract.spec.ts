@@ -6,6 +6,7 @@ describe('Contract domain value object', () => {
   test('should not create contract with invalid parameter (too few characters)', () => {
     const value = 'A';
     const contract = Contract.create(value);
+    expect(contract.isRight()).toBe(false);
     expect(contract).toEqual(left(new InvalidContractError(value)));
   });
 
@@ -16,12 +17,14 @@ describe('Contract domain value object', () => {
     }
 
     const contract = Contract.create(value);
+    expect(contract.isRight()).toBe(false);
     expect(contract).toEqual(left(new InvalidContractError(value)));
   });
 
   test('should not create contract with invalid parameter (only blank spaces)', () => {
     const value = '   ';
     const contract = Contract.create(value);
+    expect(contract.isRight()).toBe(false);
     expect(contract).toEqual(left(new InvalidContractError(value)));
   });
 
@@ -29,6 +32,7 @@ describe('Contract domain value object', () => {
     const value = 'São Luis';
     const contractOrError = Contract.create(value);
     const contract = contractOrError.value as Contract;
+    expect(contractOrError.isLeft()).toBe(false);
     expect(contractOrError.isRight()).toEqual(true);
     expect(contractOrError.value).toBeInstanceOf(Contract);
     expect(contract.value).toEqual(value);
