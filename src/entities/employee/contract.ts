@@ -1,14 +1,14 @@
 import { Either, left, right } from '../../shared/either';
-import { InvalidNameError } from './errors/invalid-name';
+import { InvalidContractError } from './errors/invalid-contract';
 
 export default class Contract {
   private constructor(private readonly contract: string) {
     Object.freeze(this);
   }
 
-  static create(contract: string): Either<InvalidNameError, Contract> {
+  static create(contract: string): Either<InvalidContractError, Contract> {
     if (!Contract.validate(contract)) {
-      return left(new InvalidNameError(contract));
+      return left(new InvalidContractError(contract));
     }
 
     return right(new Contract(contract));

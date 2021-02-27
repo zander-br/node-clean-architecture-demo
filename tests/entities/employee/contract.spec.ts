@@ -1,4 +1,4 @@
-import { InvalidNameError } from '../../../src/entities/employee/errors/invalid-name';
+import { InvalidContractError } from '../../../src/entities/employee/errors/invalid-contract';
 import Contract from '../../../src/entities/employee/contract';
 import { left } from '../../../src/shared/either';
 
@@ -6,7 +6,7 @@ describe('Contract domain value object', () => {
   test('should not create contract with invalid parameter (too few characters)', () => {
     const value = 'A';
     const contract = Contract.create(value);
-    expect(contract).toEqual(left(new InvalidNameError(value)));
+    expect(contract).toEqual(left(new InvalidContractError(value)));
   });
 
   test('should not create contract with invalid parameter (too many characters)', () => {
@@ -16,13 +16,13 @@ describe('Contract domain value object', () => {
     }
 
     const contract = Contract.create(value);
-    expect(contract).toEqual(left(new InvalidNameError(value)));
+    expect(contract).toEqual(left(new InvalidContractError(value)));
   });
 
   test('should not create contract with invalid parameter (only blank spaces)', () => {
     const value = '   ';
     const contract = Contract.create(value);
-    expect(contract).toEqual(left(new InvalidNameError(value)));
+    expect(contract).toEqual(left(new InvalidContractError(value)));
   });
 
   test('should create contract with valid parameter', () => {
