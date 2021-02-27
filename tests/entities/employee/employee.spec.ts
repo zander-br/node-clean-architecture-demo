@@ -26,4 +26,11 @@ describe('Employee domain entity', () => {
       left(new InvalidContractError(employeeWithInvalidContract.contract)),
     );
   });
+
+  test('should create employee without medical leave when not informed', () => {
+    const employeeWithoutMedicalLeave = EmployeeBuilder.aEmployee().build();
+    const employeeOrError = Employee.create(employeeWithoutMedicalLeave);
+    const employee = employeeOrError.value as Employee;
+    expect(employee.medicalLeave).toBe(false);
+  });
 });
