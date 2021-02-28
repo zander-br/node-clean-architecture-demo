@@ -97,6 +97,17 @@ describe('Benefit domain value object', () => {
     );
   });
 
+  test('should return true when calling isUnique on a monthly frequency', () => {
+    const benefitMonthly = BenefitDataBuilder.aBenefit()
+      .withMonthlyFrequency()
+      .build();
+
+    const benefitOrError = Benefit.create(benefitMonthly);
+    const benefit = benefitOrError.value as Benefit;
+
+    expect(benefit.isUnique()).toBe(true);
+  });
+
   test('should create benefit with valid parameter', () => {
     const benefitValid = BenefitDataBuilder.aBenefit().build();
 

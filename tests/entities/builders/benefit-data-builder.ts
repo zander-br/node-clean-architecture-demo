@@ -70,6 +70,11 @@ export default class BenefitDataBuilder {
     return this;
   }
 
+  public withMonthlyFrequency(): BenefitDataBuilder {
+    this.benefit.frequency = 'Monthly';
+    return this;
+  }
+
   public build(): BenefitData {
     return this.benefit;
   }
