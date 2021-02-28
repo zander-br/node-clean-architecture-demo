@@ -92,10 +92,8 @@ describe('Employee domain entity', () => {
   });
 
   test('should not be able to add a duplicate benefit', () => {
-    const employee = EmployeeBuilder.aEmployee().build();
+    const employee = EmployeeBuilder.aEmployee().withOneBenefit().build();
     const benefit = BenefitBuilder.aBenefit().build();
-
-    employee.addBenefit(benefit);
 
     const addBenefitOrError = employee.addBenefit(benefit);
     expect(addBenefitOrError.isRight()).toBe(false);
