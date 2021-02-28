@@ -3,6 +3,7 @@ import Benefit from './benefit';
 import Contract from './contract';
 import { EmployeeData } from './employee-data';
 import { InvalidContractError } from './errors/invalid-contract';
+import { DuplicateBenefitError } from './errors/invalid-employee';
 import { InvalidNameError } from './errors/invalid-name';
 import Name from './name';
 
@@ -40,6 +41,20 @@ export default class Employee {
         employeeData.mealVoucherDiscount,
       ),
     );
+  }
+
+  public addBenefit(benefit: Benefit): Either<DuplicateBenefitError, true> {
+    const findBenefit = this.#benefits.find(
+      b => b.name.toLowerCase() === benefit.name.toLowerCase(),
+    );
+
+    if (findBenefit) {
+      return left(new DuplicateBenefitError(benefit));
+    }
+
+    this.#benefits.push(benefit);
+
+    return right(true);
   }
 
   get benefits(): Benefit[] {
