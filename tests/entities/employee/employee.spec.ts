@@ -1,8 +1,11 @@
 import { InvalidNameError } from '../../../src/entities/employee/errors/invalid-name';
 import { InvalidContractError } from '../../../src/entities/employee/errors/invalid-contract';
+import { DuplicateBenefitError } from '../../../src/entities/employee/errors/invalid-employee';
 import Employee from '../../../src/entities/employee/employee';
 import { left } from '../../../src/shared/either';
 import EmployeeBuilder from '../builders/employee-builder';
+import BenefitBuilder from '../builders/benefit-builder';
+import Benefit from '../../../src/entities/employee/benefit';
 
 describe('Employee domain entity', () => {
   test('should not create employee with invalid name', () => {
@@ -86,5 +89,22 @@ describe('Employee domain entity', () => {
     const employeeOrError = Employee.create(employeeData);
     const employee = employeeOrError.value as Employee;
     expect(employee.benefits).toHaveLength(0);
+  });
+
+  test('should not be able to add a duplicate benefit', () => {
+    const employeeData = EmployeeBuilder.aEmployee().build();
+    const benefitData = BenefitBuilder.aBenefit().build();
+
+    const employeeOrError = Employee.create(employeeData);
+    const benefitOrError = Benefit.create(benefitData);
+    const employee = employeeOrError.value as Employee;
+    const benefit = benefitOrError.value as Benefit;
+
+    employee.addBenefit(benefit);
+
+    const addBenefitOrError = employee.addBenefit(benefit);
+    expect(addBenefitOrError.isRight()).toBe(false);
+    expect(addBenefitOrError).toEqual(left(new DuplicateBenefitError(benefit)));
+    expect(employee.benefits).toHaveLength(1);
   });
 });
