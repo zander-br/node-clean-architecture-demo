@@ -1,6 +1,6 @@
 import { BenefitData } from '../../../src/entities/employee/benefit-data';
 
-export default class BenefitBuilder {
+export default class BenefitDataBuilder {
   private benefit: BenefitData = {
     name: 'VR Refeição',
     value: 22,
@@ -8,23 +8,23 @@ export default class BenefitBuilder {
     frequency: 'Daily',
   };
 
-  public static aBenefit(): BenefitBuilder {
-    return new BenefitBuilder();
+  public static aBenefit(): BenefitDataBuilder {
+    return new BenefitDataBuilder();
   }
 
-  public withInvalidName(): BenefitBuilder {
+  public withInvalidName(): BenefitDataBuilder {
     this.benefit.name = '';
     return this;
   }
 
-  public withFewCharactersInName(): BenefitBuilder {
+  public withFewCharactersInName(): BenefitDataBuilder {
     this.benefit.name = 'A';
     return this;
   }
 
-  public withManyCharactersInName(quantity = 256): BenefitBuilder {
+  public withManyCharactersInName(): BenefitDataBuilder {
     let name = '';
-    for (let i = 0; i < quantity; i++) {
+    for (let i = 0; i < 256; i++) {
       name += 'c';
     }
 
@@ -32,39 +32,39 @@ export default class BenefitBuilder {
     return this;
   }
 
-  public withNullValueInName(): BenefitBuilder {
+  public withNullValueInName(): BenefitDataBuilder {
     this.benefit.name = null;
     return this;
   }
 
-  public withInvalidValue(): BenefitBuilder {
+  public withInvalidValue(): BenefitDataBuilder {
     this.benefit.value = 0;
     return this;
   }
 
-  public withZeroValue(): BenefitBuilder {
+  public withZeroValue(): BenefitDataBuilder {
     this.benefit.value = 0;
     return this;
   }
 
-  public withNullValue(): BenefitBuilder {
+  public withNullValue(): BenefitDataBuilder {
     this.benefit.value = null;
     return this;
   }
 
-  public withInvalidFrequency(): BenefitBuilder {
+  public withInvalidFrequency(): BenefitDataBuilder {
     this.benefit.frequency = 'Daily';
     this.benefit.type = 'Snack';
     return this;
   }
 
-  public withInvalidFrequencyForSnack(): BenefitBuilder {
+  public withInvalidFrequencyForSnack(): BenefitDataBuilder {
     this.benefit.frequency = 'Daily';
     this.benefit.type = 'Snack';
     return this;
   }
 
-  public withInvalidFrequencyForFuel(): BenefitBuilder {
+  public withInvalidFrequencyForFuel(): BenefitDataBuilder {
     this.benefit.frequency = 'Daily';
     this.benefit.type = 'Fuel';
     return this;
