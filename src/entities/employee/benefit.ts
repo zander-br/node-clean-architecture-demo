@@ -46,6 +46,10 @@ export default class Benefit {
     return right(benefit);
   }
 
+  public isUnique(): boolean {
+    return this.frequency === 'Monthly';
+  }
+
   private static validateName(name: string) {
     return name !== null && name.trim().length > 2 && name.trim().length < 255;
   }

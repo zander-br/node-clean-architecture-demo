@@ -53,7 +53,6 @@ export default class Employee {
     }
 
     this.#benefits.push(benefit);
-
     return right(true);
   }
 
