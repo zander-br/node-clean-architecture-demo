@@ -4,8 +4,7 @@ import { DuplicateBenefitError } from '../../../src/entities/employee/errors/inv
 import Employee from '../../../src/entities/employee/employee';
 import { left } from '../../../src/shared/either';
 import EmployeeDataBuilder from '../builders/employee-data-builder';
-import BenefitDataBuilder from '../builders/benefit-data-builder';
-import Benefit from '../../../src/entities/employee/benefit';
+import BenefitBuilder from '../builders/benefit-builder';
 
 describe('Employee domain entity', () => {
   test('should not create employee with invalid name', () => {
@@ -93,12 +92,10 @@ describe('Employee domain entity', () => {
 
   test('should not be able to add a duplicate benefit', () => {
     const employeeData = EmployeeDataBuilder.aEmployee().build();
-    const benefitData = BenefitDataBuilder.aBenefit().build();
 
     const employeeOrError = Employee.create(employeeData);
-    const benefitOrError = Benefit.create(benefitData);
     const employee = employeeOrError.value as Employee;
-    const benefit = benefitOrError.value as Benefit;
+    const benefit = BenefitBuilder.aBenefit().build();
 
     employee.addBenefit(benefit);
 
