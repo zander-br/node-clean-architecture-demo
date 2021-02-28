@@ -5,6 +5,7 @@ import Employee from '../../../src/entities/employee/employee';
 import { left } from '../../../src/shared/either';
 import EmployeeDataBuilder from '../builders/employee-data-builder';
 import BenefitBuilder from '../builders/benefit-builder';
+import EmployeeBuilder from '../builders/employee-builder';
 
 describe('Employee domain entity', () => {
   test('should not create employee with invalid name', () => {
@@ -91,10 +92,7 @@ describe('Employee domain entity', () => {
   });
 
   test('should not be able to add a duplicate benefit', () => {
-    const employeeData = EmployeeDataBuilder.aEmployee().build();
-
-    const employeeOrError = Employee.create(employeeData);
-    const employee = employeeOrError.value as Employee;
+    const employee = EmployeeBuilder.aEmployee().build();
     const benefit = BenefitBuilder.aBenefit().build();
 
     employee.addBenefit(benefit);
