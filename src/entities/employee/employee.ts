@@ -55,15 +55,19 @@ export default class Employee {
       return fail(new DuplicateBenefitError(benefit));
     }
 
-    if (
-      benefit.isUnique() &&
-      this.#benefits.findIndex(b => b.type === benefit.type) >= 0
-    ) {
+    if (this.isUniqueAndExistsType(benefit)) {
       return fail(new UniqueBenefitError(benefit));
     }
 
     this.#benefits.push(benefit);
     return success(true);
+  }
+
+  private isUniqueAndExistsType(benefit: Benefit) {
+    return (
+      benefit.isUnique() &&
+      this.#benefits.findIndex(({ type }) => type === benefit.type) >= 0
+    );
   }
 
   get benefits(): Benefit[] {
