@@ -1,4 +1,4 @@
-import BenefitDataBuilder from '../builders/benefit-data-builder';
+import BenefitDataBuilder from '../builders/benefit-builder';
 import { left } from '../../../src/shared/either';
 import Benefit from '../../../src/entities/employee/benefit';
 import {

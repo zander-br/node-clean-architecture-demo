@@ -1,6 +1,9 @@
 import { InvalidNameError } from '../../../src/entities/employee/errors/invalid-name';
 import { InvalidContractError } from '../../../src/entities/employee/errors/invalid-contract';
-import { DuplicateBenefitError } from '../../../src/entities/employee/errors/invalid-employee';
+import {
+  DuplicateBenefitError,
+  UniqueBenefitError,
+} from '../../../src/entities/employee/errors/invalid-employee';
 import Employee from '../../../src/entities/employee/employee';
 import { left } from '../../../src/shared/either';
 import EmployeeDataBuilder from '../builders/employee-data-builder';
@@ -93,11 +96,24 @@ describe('Employee domain entity', () => {
 
   test('should not be able to add a duplicate benefit', () => {
     const employee = EmployeeBuilder.aEmployee().withOneBenefit().build();
-    const benefit = BenefitBuilder.aBenefit().build();
+    const benefit = BenefitBuilder.aBenefit().buildClass();
 
     const addBenefitOrError = employee.addBenefit(benefit);
     expect(addBenefitOrError.isRight()).toBe(false);
     expect(addBenefitOrError).toEqual(left(new DuplicateBenefitError(benefit)));
+    expect(employee.benefits).toHaveLength(1);
+  });
+
+  test('should not be able to add a unique benefit if you already have one of the same type', () => {
+    const employee = EmployeeBuilder.aEmployee().withUniqueBenefit().build();
+    const benefit = BenefitBuilder.aBenefit()
+      .withAnotherName()
+      .withMonthlyFrequency()
+      .buildClass();
+    const addBenefitOrError = employee.addBenefit(benefit);
+
+    expect(addBenefitOrError.isRight()).toBe(false);
+    expect(addBenefitOrError).toEqual(left(new UniqueBenefitError(benefit)));
     expect(employee.benefits).toHaveLength(1);
   });
 });

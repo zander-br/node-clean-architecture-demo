@@ -12,8 +12,16 @@ export default class EmployeeBuilder {
   }
 
   public withOneBenefit(): EmployeeBuilder {
-    const benefit = BenefitBuilder.aBenefit().build();
+    const benefit = BenefitBuilder.aBenefit().buildClass();
     this.employee.addBenefit(benefit);
+    return this;
+  }
+
+  public withUniqueBenefit(): EmployeeBuilder {
+    const uniqueBenefit = BenefitBuilder.aBenefit()
+      .withMonthlyFrequency()
+      .buildClass();
+    this.employee.addBenefit(uniqueBenefit);
     return this;
   }
 
