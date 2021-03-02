@@ -116,4 +116,14 @@ describe('Employee domain entity', () => {
     expect(addBenefitOrError).toEqual(fail(new UniqueBenefitError(benefit)));
     expect(employee.benefits).toHaveLength(1);
   });
+
+  test('should be able to add a benefit when not exists', () => {
+    const employee = EmployeeBuilder.aEmployee().withOneBenefit().build();
+    const benefit = BenefitBuilder.aBenefit().withAnotherName().buildClass();
+    const addBenefitOrError = employee.addBenefit(benefit);
+
+    expect(addBenefitOrError.isFail()).toBe(false);
+    expect(addBenefitOrError.isSuccess()).toBe(true);
+    expect(employee.benefits).toHaveLength(2);
+  });
 });
