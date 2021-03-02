@@ -1,4 +1,4 @@
-import { Either, left, right } from '../../shared/either';
+import { Either, fail, success } from '../../shared/either';
 import Benefit from './benefit';
 import Contract from './contract';
 import { EmployeeData } from './employee-data';
@@ -28,14 +28,14 @@ export default class Employee {
     employeeData: EmployeeData,
   ): Either<InvalidNameError | InvalidContractError, Employee> {
     const nameOrError = Name.create(employeeData.name);
-    if (nameOrError.isLeft()) return left(nameOrError.value);
+    if (nameOrError.isFail()) return fail(nameOrError.value);
 
     const contractOrError = Contract.create(employeeData.contract);
-    if (contractOrError.isLeft()) return left(contractOrError.value);
+    if (contractOrError.isFail()) return fail(contractOrError.value);
 
     const name = nameOrError.value;
     const contract = contractOrError.value;
-    return right(
+    return success(
       new Employee(
         name,
         contract,
@@ -52,18 +52,18 @@ export default class Employee {
     );
 
     if (findBenefit) {
-      return left(new DuplicateBenefitError(benefit));
+      return fail(new DuplicateBenefitError(benefit));
     }
 
     if (
       benefit.isUnique() &&
       this.#benefits.findIndex(b => b.type === benefit.type) >= 0
     ) {
-      return left(new UniqueBenefitError(benefit));
+      return fail(new UniqueBenefitError(benefit));
     }
 
     this.#benefits.push(benefit);
-    return right(true);
+    return success(true);
   }
 
   get benefits(): Benefit[] {

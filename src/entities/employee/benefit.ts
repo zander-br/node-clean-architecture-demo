@@ -1,4 +1,4 @@
-import { Either, left, right } from '../../shared/either';
+import { Either, fail, success } from '../../shared/either';
 import { BenefitData } from './benefit-data';
 import {
   InvalidBenefitFrequencyError,
@@ -31,19 +31,19 @@ export default class Benefit {
     const { name, value, type, frequency } = benefitData;
 
     if (!Benefit.validateName(name)) {
-      return left(new InvalidBenefitNameError(name));
+      return fail(new InvalidBenefitNameError(name));
     }
 
     if (!Benefit.validateValue(value)) {
-      return left(new InvalidBenefitValueError(value));
+      return fail(new InvalidBenefitValueError(value));
     }
 
     if (!Benefit.validateFrequency(frequency, type)) {
-      return left(new InvalidBenefitFrequencyError(frequency, type));
+      return fail(new InvalidBenefitFrequencyError(frequency, type));
     }
 
     const benefit = new Benefit(name, value, type, frequency);
-    return right(benefit);
+    return success(benefit);
   }
 
   public isUnique(): boolean {

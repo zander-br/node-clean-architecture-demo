@@ -5,7 +5,7 @@ import {
   UniqueBenefitError,
 } from '../../../src/entities/employee/errors/invalid-employee';
 import Employee from '../../../src/entities/employee/employee';
-import { left } from '../../../src/shared/either';
+import { fail } from '../../../src/shared/either';
 import EmployeeDataBuilder from '../builders/employee-data-builder';
 import BenefitBuilder from '../builders/benefit-builder';
 import EmployeeBuilder from '../builders/employee-builder';
@@ -17,9 +17,9 @@ describe('Employee domain entity', () => {
       .build();
 
     const employeeOrError = Employee.create(employeeWithInvalidName);
-    expect(employeeOrError.isRight()).toBe(false);
+    expect(employeeOrError.isSuccess()).toBe(false);
     expect(employeeOrError).toEqual(
-      left(new InvalidNameError(employeeWithInvalidName.name)),
+      fail(new InvalidNameError(employeeWithInvalidName.name)),
     );
   });
 
@@ -29,9 +29,9 @@ describe('Employee domain entity', () => {
       .build();
 
     const employeeOrError = Employee.create(employeeWithInvalidContract);
-    expect(employeeOrError.isRight()).toBe(false);
+    expect(employeeOrError.isSuccess()).toBe(false);
     expect(employeeOrError).toEqual(
-      left(new InvalidContractError(employeeWithInvalidContract.contract)),
+      fail(new InvalidContractError(employeeWithInvalidContract.contract)),
     );
   });
 
@@ -99,8 +99,8 @@ describe('Employee domain entity', () => {
     const benefit = BenefitBuilder.aBenefit().buildClass();
 
     const addBenefitOrError = employee.addBenefit(benefit);
-    expect(addBenefitOrError.isRight()).toBe(false);
-    expect(addBenefitOrError).toEqual(left(new DuplicateBenefitError(benefit)));
+    expect(addBenefitOrError.isSuccess()).toBe(false);
+    expect(addBenefitOrError).toEqual(fail(new DuplicateBenefitError(benefit)));
     expect(employee.benefits).toHaveLength(1);
   });
 
@@ -112,8 +112,8 @@ describe('Employee domain entity', () => {
       .buildClass();
     const addBenefitOrError = employee.addBenefit(benefit);
 
-    expect(addBenefitOrError.isRight()).toBe(false);
-    expect(addBenefitOrError).toEqual(left(new UniqueBenefitError(benefit)));
+    expect(addBenefitOrError.isSuccess()).toBe(false);
+    expect(addBenefitOrError).toEqual(fail(new UniqueBenefitError(benefit)));
     expect(employee.benefits).toHaveLength(1);
   });
 });

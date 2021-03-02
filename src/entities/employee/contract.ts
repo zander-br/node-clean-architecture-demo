@@ -1,4 +1,4 @@
-import { Either, left, right } from '../../shared/either';
+import { Either, fail, success } from '../../shared/either';
 import { InvalidContractError } from './errors/invalid-contract';
 
 export default class Contract {
@@ -8,10 +8,10 @@ export default class Contract {
 
   static create(contract: string): Either<InvalidContractError, Contract> {
     if (!Contract.validate(contract)) {
-      return left(new InvalidContractError(contract));
+      return fail(new InvalidContractError(contract));
     }
 
-    return right(new Contract(contract));
+    return success(new Contract(contract));
   }
 
   get value(): string {
