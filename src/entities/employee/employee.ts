@@ -46,7 +46,7 @@ export default class Employee {
     );
   }
 
-  public addBenefit(benefit: Benefit): Either<DuplicateBenefitError, true> {
+  public addBenefit(benefit: Benefit): Either<DuplicateBenefitError, Benefit> {
     if (this.existsBenefitForName(benefit.name)) {
       return fail(new DuplicateBenefitError(benefit));
     }
@@ -56,7 +56,7 @@ export default class Employee {
     }
 
     this.#benefits.push(benefit);
-    return success(true);
+    return success(benefit);
   }
 
   private existsBenefitForName(name: string) {
