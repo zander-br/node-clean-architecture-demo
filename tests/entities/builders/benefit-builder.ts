@@ -1,7 +1,7 @@
 import Benefit from '../../../src/entities/employee/benefit';
 import { BenefitData } from '../../../src/entities/employee/benefit-data';
 
-export default class BenefitDataBuilder {
+export default class BenefitBuilder {
   private benefit: BenefitData = {
     name: 'VR Refeição',
     value: 22,
@@ -9,26 +9,26 @@ export default class BenefitDataBuilder {
     frequency: 'Daily',
   };
 
-  public static aBenefit(): BenefitDataBuilder {
-    return new BenefitDataBuilder();
+  public static aBenefit(): BenefitBuilder {
+    return new BenefitBuilder();
   }
 
-  public withInvalidName(): BenefitDataBuilder {
+  public withInvalidName(): BenefitBuilder {
     this.benefit.name = '';
     return this;
   }
 
-  public withAnotherName(): BenefitDataBuilder {
+  public withAnotherName(): BenefitBuilder {
     this.benefit.name = 'Another name';
     return this;
   }
 
-  public withFewCharactersInName(): BenefitDataBuilder {
+  public withFewCharactersInName(): BenefitBuilder {
     this.benefit.name = 'A';
     return this;
   }
 
-  public withManyCharactersInName(): BenefitDataBuilder {
+  public withManyCharactersInName(): BenefitBuilder {
     let name = '';
     for (let i = 0; i < 256; i++) {
       name += 'c';
@@ -38,45 +38,45 @@ export default class BenefitDataBuilder {
     return this;
   }
 
-  public withNullValueInName(): BenefitDataBuilder {
+  public withNullValueInName(): BenefitBuilder {
     this.benefit.name = null;
     return this;
   }
 
-  public withInvalidValue(): BenefitDataBuilder {
+  public withInvalidValue(): BenefitBuilder {
     this.benefit.value = 0;
     return this;
   }
 
-  public withZeroValue(): BenefitDataBuilder {
+  public withZeroValue(): BenefitBuilder {
     this.benefit.value = 0;
     return this;
   }
 
-  public withNullValue(): BenefitDataBuilder {
+  public withNullValue(): BenefitBuilder {
     this.benefit.value = null;
     return this;
   }
 
-  public withInvalidFrequency(): BenefitDataBuilder {
+  public withInvalidFrequency(): BenefitBuilder {
     this.benefit.frequency = 'Daily';
     this.benefit.type = 'Snack';
     return this;
   }
 
-  public withInvalidFrequencyForSnack(): BenefitDataBuilder {
+  public withInvalidFrequencyForSnack(): BenefitBuilder {
     this.benefit.frequency = 'Daily';
     this.benefit.type = 'Snack';
     return this;
   }
 
-  public withInvalidFrequencyForFuel(): BenefitDataBuilder {
+  public withInvalidFrequencyForFuel(): BenefitBuilder {
     this.benefit.frequency = 'Daily';
     this.benefit.type = 'Fuel';
     return this;
   }
 
-  public withMonthlyFrequency(): BenefitDataBuilder {
+  public withMonthlyFrequency(): BenefitBuilder {
     this.benefit.frequency = 'Monthly';
     this.benefit.type = 'Snack';
     return this;

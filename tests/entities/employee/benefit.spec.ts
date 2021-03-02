@@ -1,4 +1,4 @@
-import BenefitDataBuilder from '../builders/benefit-builder';
+import BenefitBuilder from '../builders/benefit-builder';
 import { left } from '../../../src/shared/either';
 import Benefit from '../../../src/entities/employee/benefit';
 import {
@@ -9,7 +9,7 @@ import {
 
 describe('Benefit domain value object', () => {
   test('should not create benefit with invalid name (too few characters)', () => {
-    const benefitWithFewCharactersInName = BenefitDataBuilder.aBenefit()
+    const benefitWithFewCharactersInName = BenefitBuilder.aBenefit()
       .withFewCharactersInName()
       .build();
     const benefitOrError = Benefit.create(benefitWithFewCharactersInName);
@@ -21,7 +21,7 @@ describe('Benefit domain value object', () => {
   });
 
   test('should not create benefit with invalid name (too many characters)', () => {
-    const benefitWithManyCharactersInName = BenefitDataBuilder.aBenefit()
+    const benefitWithManyCharactersInName = BenefitBuilder.aBenefit()
       .withManyCharactersInName()
       .build();
     const benefitOrError = Benefit.create(benefitWithManyCharactersInName);
@@ -33,7 +33,7 @@ describe('Benefit domain value object', () => {
   });
 
   test('should not create benefit with invalid name (null value)', () => {
-    const benefitWithNullValueInName = BenefitDataBuilder.aBenefit()
+    const benefitWithNullValueInName = BenefitBuilder.aBenefit()
       .withNullValueInName()
       .build();
     const benefitOrError = Benefit.create(benefitWithNullValueInName);
@@ -45,7 +45,7 @@ describe('Benefit domain value object', () => {
   });
 
   test('should not create benefit with invalid value (zero value)', () => {
-    const benefitWithZeroValue = BenefitDataBuilder.aBenefit()
+    const benefitWithZeroValue = BenefitBuilder.aBenefit()
       .withZeroValue()
       .build();
 
@@ -57,7 +57,7 @@ describe('Benefit domain value object', () => {
   });
 
   test('should not create benefit with invalid value (null value)', () => {
-    const benefitWithNullValue = BenefitDataBuilder.aBenefit()
+    const benefitWithNullValue = BenefitBuilder.aBenefit()
       .withNullValue()
       .build();
 
@@ -69,7 +69,7 @@ describe('Benefit domain value object', () => {
   });
 
   test('should not create benefit with invalid frequency (type snack)', () => {
-    const benefitWithInvalidFrequencyForSnack = BenefitDataBuilder.aBenefit()
+    const benefitWithInvalidFrequencyForSnack = BenefitBuilder.aBenefit()
       .withInvalidFrequencyForSnack()
       .build();
 
@@ -84,7 +84,7 @@ describe('Benefit domain value object', () => {
   });
 
   test('should not create benefit with invalid frequency (type fuel)', () => {
-    const benefitWithInvalidFrequencyForFuel = BenefitDataBuilder.aBenefit()
+    const benefitWithInvalidFrequencyForFuel = BenefitBuilder.aBenefit()
       .withInvalidFrequencyForFuel()
       .build();
 
@@ -98,7 +98,7 @@ describe('Benefit domain value object', () => {
   });
 
   test('should return true when calling isUnique on a monthly frequency', () => {
-    const benefitMonthly = BenefitDataBuilder.aBenefit()
+    const benefitMonthly = BenefitBuilder.aBenefit()
       .withMonthlyFrequency()
       .build();
     const benefitOrError = Benefit.create(benefitMonthly);
@@ -108,7 +108,7 @@ describe('Benefit domain value object', () => {
   });
 
   test('should return false when calling isUnique on a daily frequency', () => {
-    const benefitDaily = BenefitDataBuilder.aBenefit().build();
+    const benefitDaily = BenefitBuilder.aBenefit().build();
     const benefitOrError = Benefit.create(benefitDaily);
     const benefit = benefitOrError.value as Benefit;
 
@@ -116,7 +116,7 @@ describe('Benefit domain value object', () => {
   });
 
   test('should create benefit with valid parameter', () => {
-    const benefitValid = BenefitDataBuilder.aBenefit().build();
+    const benefitValid = BenefitBuilder.aBenefit().build();
 
     const benefitOrError = Benefit.create(benefitValid);
     const benefit = benefitOrError.value as Benefit;
