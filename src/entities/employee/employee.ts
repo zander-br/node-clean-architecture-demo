@@ -47,11 +47,7 @@ export default class Employee {
   }
 
   public addBenefit(benefit: Benefit): Either<DuplicateBenefitError, true> {
-    const findBenefit = this.#benefits.find(
-      b => b.name.toLowerCase() === benefit.name.toLowerCase(),
-    );
-
-    if (findBenefit) {
+    if (this.existsBenefitForName(benefit.name)) {
       return fail(new DuplicateBenefitError(benefit));
     }
 
@@ -61,6 +57,12 @@ export default class Employee {
 
     this.#benefits.push(benefit);
     return success(true);
+  }
+
+  private existsBenefitForName(name: string) {
+    return this.#benefits.find(
+      benefit => benefit.name.toLowerCase() === name.toLowerCase(),
+    );
   }
 
   private isUniqueAndExistsType(benefit: Benefit) {
