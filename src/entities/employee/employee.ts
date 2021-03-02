@@ -3,7 +3,10 @@ import Benefit from './benefit';
 import Contract from './contract';
 import { EmployeeData } from './employee-data';
 import { InvalidContractError } from './errors/invalid-contract';
-import { DuplicateBenefitError } from './errors/invalid-employee';
+import {
+  DuplicateBenefitError,
+  UniqueBenefitError,
+} from './errors/invalid-employee';
 import { InvalidNameError } from './errors/invalid-name';
 import Name from './name';
 
@@ -50,6 +53,13 @@ export default class Employee {
 
     if (findBenefit) {
       return left(new DuplicateBenefitError(benefit));
+    }
+
+    if (
+      benefit.isUnique() &&
+      this.#benefits.findIndex(b => b.type === benefit.type) >= 0
+    ) {
+      return left(new UniqueBenefitError(benefit));
     }
 
     this.#benefits.push(benefit);
