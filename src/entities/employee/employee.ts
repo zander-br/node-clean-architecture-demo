@@ -68,12 +68,14 @@ export default class Employee {
   public calculateBenefits(
     data: CalculateBenefitsParms,
   ): Either<BenefitsEmptyError, Benefit[]> {
-    if (this.#benefits.length === 0) {
+    if (!this.hasBenefits()) {
       return fail(new BenefitsEmptyError());
     }
 
     return success(this.#benefits);
   }
+
+  public hasBenefits = (): boolean => this.#benefits.length > 0;
 
   private existsBenefitForName(name: string) {
     return this.#benefits.find(
