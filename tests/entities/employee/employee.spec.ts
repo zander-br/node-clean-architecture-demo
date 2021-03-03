@@ -1,6 +1,7 @@
 import { InvalidNameError } from '../../../src/entities/employee/errors/invalid-name';
 import { InvalidContractError } from '../../../src/entities/employee/errors/invalid-contract';
 import {
+  BenefitsEmptyError,
   DuplicateBenefitError,
   UniqueBenefitError,
 } from '../../../src/entities/employee/errors/invalid-employee';
@@ -125,5 +126,16 @@ describe('Employee domain entity', () => {
     expect(addBenefitOrError.isFail()).toBe(false);
     expect(addBenefitOrError.isSuccess()).toBe(true);
     expect(employee.benefits).toHaveLength(2);
+  });
+
+  test('should return BenefitsEmptyError if list of benefits is empty', () => {
+    const employeeEmptyBenefits = EmployeeBuilder.aEmployee().build();
+    const calculateBenefits = employeeEmptyBenefits.calculateBenefits({
+      worksDays: 10,
+      daysAtHomeOffice: 10,
+    });
+
+    expect(calculateBenefits.isFail()).toBe(true);
+    expect(calculateBenefits).toEqual(fail(new BenefitsEmptyError()));
   });
 });
