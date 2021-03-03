@@ -1,31 +1,64 @@
 import Employee from '../../../src/entities/employee/employee';
+import { EmployeeData } from '../../../src/entities/employee/employee-data';
 import BenefitBuilder from './benefit-builder';
-import EmployeeDataBuilder from './employee-data-builder';
 
-export default class EmployeeBuilder {
-  private employeeData = EmployeeDataBuilder.aEmployee().build();
+export default class EmployeeDataBuilder {
+  private employee: EmployeeData = {
+    name: 'Anderson Santos',
+    contract: 'São Luis',
+  };
 
-  private employee = Employee.create(this.employeeData).value as Employee;
-
-  public static aEmployee(): EmployeeBuilder {
-    return new EmployeeBuilder();
+  public static aEmployee(): EmployeeDataBuilder {
+    return new EmployeeDataBuilder();
   }
 
-  public withOneBenefit(): EmployeeBuilder {
-    const benefit = BenefitBuilder.aBenefit().buildClass();
-    this.employee.addBenefit(benefit);
+  public withInvalidName(): EmployeeDataBuilder {
+    this.employee.name = '';
     return this;
   }
 
-  public withUniqueBenefit(): EmployeeBuilder {
+  public withInvalidContract(): EmployeeDataBuilder {
+    this.employee.contract = '';
+    return this;
+  }
+
+  public withMedicalLeave(): EmployeeDataBuilder {
+    this.employee.medicalLeave = true;
+    return this;
+  }
+
+  public withoutTransportationVoucherDiscount(): EmployeeDataBuilder {
+    this.employee.transportationVoucherDiscount = false;
+    return this;
+  }
+
+  public withoutMealVoucherDiscount(): EmployeeDataBuilder {
+    this.employee.mealVoucherDiscount = false;
+    return this;
+  }
+
+  public build(): EmployeeData {
+    return this.employee;
+  }
+
+  public buildClass(): Employee {
+    const employeeClass = Employee.create(this.employee).value as Employee;
+    return employeeClass;
+  }
+
+  public buildClassWithOneBenefit(): Employee {
+    const employeeClass = Employee.create(this.employee).value as Employee;
+    const benefit = BenefitBuilder.aBenefit().buildClass();
+    employeeClass.addBenefit(benefit);
+    return employeeClass;
+  }
+
+  public buildClassWithUniqueBenefit(): Employee {
+    const employeeClass = Employee.create(this.employee).value as Employee;
     const uniqueBenefit = BenefitBuilder.aBenefit()
       .withMonthlyFrequency()
       .buildClass();
-    this.employee.addBenefit(uniqueBenefit);
-    return this;
-  }
-
-  public build(): Employee {
-    return this.employee;
+    employeeClass.addBenefit(uniqueBenefit);
+    return employeeClass;
   }
 }

@@ -7,13 +7,12 @@ import {
 } from '../../../src/entities/employee/errors/invalid-employee';
 import Employee from '../../../src/entities/employee/employee';
 import { fail } from '../../../src/shared/either';
-import EmployeeDataBuilder from '../builders/employee-data-builder';
 import BenefitBuilder from '../builders/benefit-builder';
 import EmployeeBuilder from '../builders/employee-builder';
 
 describe('Employee domain entity', () => {
   test('should not create employee with invalid name', () => {
-    const employeeWithInvalidName = EmployeeDataBuilder.aEmployee()
+    const employeeWithInvalidName = EmployeeBuilder.aEmployee()
       .withInvalidName()
       .build();
 
@@ -25,7 +24,7 @@ describe('Employee domain entity', () => {
   });
 
   test('should not create employee with invalid contract', () => {
-    const employeeWithInvalidContract = EmployeeDataBuilder.aEmployee()
+    const employeeWithInvalidContract = EmployeeBuilder.aEmployee()
       .withInvalidContract()
       .build();
 
@@ -37,14 +36,14 @@ describe('Employee domain entity', () => {
   });
 
   test('should create employee without medical leave when not informed', () => {
-    const employeeWithoutMedicalLeave = EmployeeDataBuilder.aEmployee().build();
+    const employeeWithoutMedicalLeave = EmployeeBuilder.aEmployee().build();
     const employeeOrError = Employee.create(employeeWithoutMedicalLeave);
     const employee = employeeOrError.value as Employee;
     expect(employee.medicalLeave).toBe(false);
   });
 
   test('should create employee with medical leave when informed', () => {
-    const employeeWithMedicalLeave = EmployeeDataBuilder.aEmployee()
+    const employeeWithMedicalLeave = EmployeeBuilder.aEmployee()
       .withMedicalLeave()
       .build();
     const employeeOrError = Employee.create(employeeWithMedicalLeave);
@@ -53,7 +52,7 @@ describe('Employee domain entity', () => {
   });
 
   test('should create employee with transportation voucher discount when not informed', () => {
-    const employeeWithTransportationVoucherDiscount = EmployeeDataBuilder.aEmployee().build();
+    const employeeWithTransportationVoucherDiscount = EmployeeBuilder.aEmployee().build();
     const employeeOrError = Employee.create(
       employeeWithTransportationVoucherDiscount,
     );
@@ -62,7 +61,7 @@ describe('Employee domain entity', () => {
   });
 
   test('should create employee without transportation voucher discount when informed', () => {
-    const employeeWithoutTransportationVoucherDiscount = EmployeeDataBuilder.aEmployee()
+    const employeeWithoutTransportationVoucherDiscount = EmployeeBuilder.aEmployee()
       .withoutTransportationVoucherDiscount()
       .build();
     const employeeOrError = Employee.create(
@@ -73,14 +72,14 @@ describe('Employee domain entity', () => {
   });
 
   test('should create employee with meal voucher discount when not informed', () => {
-    const employeeWithMealVoucherDiscount = EmployeeDataBuilder.aEmployee().build();
+    const employeeWithMealVoucherDiscount = EmployeeBuilder.aEmployee().build();
     const employeeOrError = Employee.create(employeeWithMealVoucherDiscount);
     const employee = employeeOrError.value as Employee;
     expect(employee.mealVoucherDiscount).toBe(true);
   });
 
   test('should create employee without meal voucher discount when informed', () => {
-    const employeeWithoutMealVoucherDiscount = EmployeeDataBuilder.aEmployee()
+    const employeeWithoutMealVoucherDiscount = EmployeeBuilder.aEmployee()
       .withoutMealVoucherDiscount()
       .build();
     const employeeOrError = Employee.create(employeeWithoutMealVoucherDiscount);
@@ -89,14 +88,14 @@ describe('Employee domain entity', () => {
   });
 
   test('should create employee with benefits empty', () => {
-    const employeeData = EmployeeDataBuilder.aEmployee().build();
+    const employeeData = EmployeeBuilder.aEmployee().build();
     const employeeOrError = Employee.create(employeeData);
     const employee = employeeOrError.value as Employee;
     expect(employee.benefits).toHaveLength(0);
   });
 
   test('should not be able to add a duplicate benefit', () => {
-    const employee = EmployeeBuilder.aEmployee().withOneBenefit().build();
+    const employee = EmployeeBuilder.aEmployee().buildClassWithOneBenefit();
     const benefit = BenefitBuilder.aBenefit().buildClass();
 
     const addBenefitOrError = employee.addBenefit(benefit);
@@ -106,7 +105,7 @@ describe('Employee domain entity', () => {
   });
 
   test('should not be able to add a unique benefit if you already have one of the same type', () => {
-    const employee = EmployeeBuilder.aEmployee().withUniqueBenefit().build();
+    const employee = EmployeeBuilder.aEmployee().buildClassWithUniqueBenefit();
     const benefit = BenefitBuilder.aBenefit()
       .withAnotherName()
       .withMonthlyFrequency()
@@ -119,7 +118,7 @@ describe('Employee domain entity', () => {
   });
 
   test('should be able to add a benefit when not exists', () => {
-    const employee = EmployeeBuilder.aEmployee().withOneBenefit().build();
+    const employee = EmployeeBuilder.aEmployee().buildClassWithOneBenefit();
     const benefit = BenefitBuilder.aBenefit().withAnotherName().buildClass();
     const addBenefitOrError = employee.addBenefit(benefit);
 
@@ -129,7 +128,7 @@ describe('Employee domain entity', () => {
   });
 
   test('should return BenefitsEmptyError if list of benefits is empty', () => {
-    const employeeEmptyBenefits = EmployeeBuilder.aEmployee().build();
+    const employeeEmptyBenefits = EmployeeBuilder.aEmployee().buildClass();
     const calculateBenefits = employeeEmptyBenefits.calculateBenefits({
       worksDays: 10,
       daysAtHomeOffice: 10,
