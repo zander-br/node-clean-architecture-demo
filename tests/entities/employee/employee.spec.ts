@@ -9,6 +9,7 @@ import Employee from '../../../src/entities/employee/employee';
 import { fail } from '../../../src/shared/either';
 import BenefitBuilder from '../builders/benefit-builder';
 import EmployeeBuilder from '../builders/employee-builder';
+import Benefit from '../../../src/entities/employee/benefit';
 
 describe('Employee domain entity', () => {
   test('should not create employee with invalid name', () => {
@@ -136,5 +137,21 @@ describe('Employee domain entity', () => {
 
     expect(calculateBenefits.isFail()).toBe(true);
     expect(calculateBenefits).toEqual(fail(new BenefitsEmptyError()));
+  });
+
+  test('should only return snack benefit for employees on medical leave', () => {
+    const employeeOnMedicalLeave = EmployeeBuilder.aEmployee()
+      .withMedicalLeave()
+      .buildClassWithOneBenefit();
+    const snackBenefit = BenefitBuilder.aBenefit().withSnackType().buildClass();
+    employeeOnMedicalLeave.addBenefit(snackBenefit);
+    const benefitsOrError = employeeOnMedicalLeave.calculateBenefits({
+      worksDays: 0,
+    });
+    const benefits = benefitsOrError.value as Benefit[];
+
+    expect(benefitsOrError.isSuccess()).toBe(true);
+    expect(benefits).toHaveLength(1);
+    expect(benefits).toEqual([snackBenefit]);
   });
 });

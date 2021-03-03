@@ -70,6 +70,14 @@ export default class BenefitBuilder {
     return this;
   }
 
+  public withSnackType(): BenefitBuilder {
+    this.benefit.frequency = 'Monthly';
+    this.benefit.type = 'Snack';
+    this.benefit.value = 150;
+    this.benefit.name = 'VR Alimentação';
+    return this;
+  }
+
   public withInvalidFrequencyForFuel(): BenefitBuilder {
     this.benefit.frequency = 'Daily';
     this.benefit.type = 'Fuel';
