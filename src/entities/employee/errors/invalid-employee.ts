@@ -13,3 +13,10 @@ export class UniqueBenefitError extends Error implements DomainError {
     this.name = 'UniqueBenefitError';
   }
 }
+
+export class BenefitsEmptyError extends Error implements DomainError {
+  constructor() {
+    super('Employee benefits list is empty');
+    this.name = 'BenefitsEmptyError';
+  }
+}

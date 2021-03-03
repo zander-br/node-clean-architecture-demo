@@ -4,11 +4,17 @@ import Contract from './contract';
 import { EmployeeData } from './employee-data';
 import { InvalidContractError } from './errors/invalid-contract';
 import {
+  BenefitsEmptyError,
   DuplicateBenefitError,
   UniqueBenefitError,
 } from './errors/invalid-employee';
 import { InvalidNameError } from './errors/invalid-name';
 import Name from './name';
+
+type CalculateBenefitsParms = {
+  worksDays: number;
+  daysAtHomeOffice?: number;
+};
 
 export default class Employee {
   readonly #benefits: Benefit[];
@@ -57,6 +63,16 @@ export default class Employee {
 
     this.#benefits.push(benefit);
     return success(benefit);
+  }
+
+  public calculateBenefits(
+    data: CalculateBenefitsParms,
+  ): Either<BenefitsEmptyError, Benefit[]> {
+    if (this.#benefits.length === 0) {
+      return fail(new BenefitsEmptyError());
+    }
+
+    return success(this.#benefits);
   }
 
   private existsBenefitForName(name: string) {
