@@ -72,6 +72,12 @@ export default class Employee {
       return fail(new BenefitsEmptyError());
     }
 
+    if (this.medicalLeave) {
+      return success(
+        this.#benefits.filter(benefit => benefit.type === 'Snack'),
+      );
+    }
+
     return success(this.#benefits);
   }
 
