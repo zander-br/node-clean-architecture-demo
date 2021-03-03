@@ -130,20 +130,20 @@ describe('Employee domain entity', () => {
 
   test('should return BenefitsEmptyError if list of benefits is empty', () => {
     const employeeEmptyBenefits = EmployeeBuilder.aEmployee().buildClass();
-    const calculateBenefits = employeeEmptyBenefits.calculateBenefits({
+    const benefitsOrError = employeeEmptyBenefits.calculateBenefits({
       worksDays: 10,
       daysAtHomeOffice: 10,
     });
 
-    expect(calculateBenefits.isFail()).toBe(true);
-    expect(calculateBenefits).toEqual(fail(new BenefitsEmptyError()));
+    expect(benefitsOrError.isFail()).toBe(true);
+    expect(benefitsOrError).toEqual(fail(new BenefitsEmptyError()));
   });
 
   test('should only return snack benefit for employees on medical leave', () => {
+    const snackBenefit = BenefitBuilder.aBenefit().withSnackType().buildClass();
     const employeeOnMedicalLeave = EmployeeBuilder.aEmployee()
       .withMedicalLeave()
       .buildClassWithOneBenefit();
-    const snackBenefit = BenefitBuilder.aBenefit().withSnackType().buildClass();
     employeeOnMedicalLeave.addBenefit(snackBenefit);
     const benefitsOrError = employeeOnMedicalLeave.calculateBenefits({
       worksDays: 0,
