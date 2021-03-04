@@ -67,6 +67,7 @@ export default class Employee {
 
   public calculateBenefits({
     worksDays,
+    daysAtHomeOffice,
   }: CalculateBenefitsParms): Either<BenefitsEmptyError, Benefit[]> {
     if (!this.hasBenefits()) {
       return fail(new BenefitsEmptyError());
@@ -78,10 +79,14 @@ export default class Employee {
       );
     }
 
+    const foodDays = this.mealVoucherDiscount
+      ? worksDays
+      : worksDays + daysAtHomeOffice;
+
     const benefitsDaily = this.#benefits
       .filter(benefit => benefit.frequency === 'Daily')
       .map(benefit => {
-        const value = benefit.value * worksDays;
+        const value = benefit.value * foodDays;
         const calculateBenefit = Benefit.create({ ...benefit, value });
         return calculateBenefit.value as Benefit;
       });
