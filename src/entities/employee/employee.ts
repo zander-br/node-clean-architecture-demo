@@ -87,18 +87,12 @@ export default class Employee {
     return success([...benefitsMonthly, ...benefitsDaily]);
   }
 
-  private getBenefitsByType(type: BenefitType) {
+  public getBenefitsByType(type: BenefitType): Benefit[] {
     return this.#benefits.filter(benefit => benefit.type === type);
   }
 
-  private getBenefitsByFrequency(frequency: Frequency) {
+  public getBenefitsByFrequency(frequency: Frequency): Benefit[] {
     return this.#benefits.filter(benefit => benefit.frequency === frequency);
-  }
-
-  private calculateBenefitValue(benefit: Benefit, days: number) {
-    const value = benefit.value * days;
-    const calculateBenefit = Benefit.create({ ...benefit, value });
-    return calculateBenefit.value as Benefit;
   }
 
   public hasBenefits = (): boolean => this.#benefits.length > 0;
@@ -114,6 +108,12 @@ export default class Employee {
       benefit.isUnique() &&
       this.#benefits.findIndex(({ type }) => type === benefit.type) >= 0
     );
+  }
+
+  private calculateBenefitValue(benefit: Benefit, days: number) {
+    const value = benefit.value * days;
+    const calculateBenefit = Benefit.create({ ...benefit, value });
+    return calculateBenefit.value as Benefit;
   }
 
   get benefits(): Benefit[] {
