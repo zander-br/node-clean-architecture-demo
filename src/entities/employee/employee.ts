@@ -1,5 +1,5 @@
 import { Either, fail, success } from '../../shared/either';
-import Benefit from './benefit';
+import Benefit, { Frequency } from './benefit';
 import Contract from './contract';
 import { EmployeeData } from './employee-data';
 import { InvalidContractError } from './errors/invalid-contract';
@@ -79,23 +79,24 @@ export default class Employee {
       );
     }
 
-    const foodDays = this.mealVoucherDiscount
-      ? worksDays
-      : worksDays + daysAtHomeOffice;
-
-    const benefitsDaily = this.#benefits
-      .filter(benefit => benefit.frequency === 'Daily')
-      .map(benefit => {
-        const value = benefit.value * foodDays;
-        const calculateBenefit = Benefit.create({ ...benefit, value });
-        return calculateBenefit.value as Benefit;
-      });
-
-    const benefitsMonthly = this.#benefits.filter(
-      benefit => benefit.frequency === 'Monthly',
+    const totalDays = worksDays + daysAtHomeOffice;
+    const foodDays = this.mealVoucherDiscount ? worksDays : totalDays;
+    const benefitsMonthly = this.getBenefitsByFrequency('Monthly');
+    const benefitsDaily = this.getBenefitsByFrequency('Daily').map(benefit =>
+      this.calculateBenefitValue(benefit, foodDays),
     );
 
-    return success([...benefitsDaily, ...benefitsMonthly]);
+    return success([...benefitsMonthly, ...benefitsDaily]);
+  }
+
+  private getBenefitsByFrequency(frequency: Frequency) {
+    return this.#benefits.filter(benefit => benefit.frequency === frequency);
+  }
+
+  private calculateBenefitValue(benefit: Benefit, days: number) {
+    const value = benefit.value * days;
+    const calculateBenefit = Benefit.create({ ...benefit, value });
+    return calculateBenefit.value as Benefit;
   }
 
   public hasBenefits = (): boolean => this.#benefits.length > 0;
