@@ -154,4 +154,25 @@ describe('Employee domain entity', () => {
     expect(benefits).toHaveLength(1);
     expect(benefits).toEqual([snackBenefit]);
   });
+
+  test('should be able calculate benefits by spending the working days', () => {
+    const snackBenefit = BenefitBuilder.aBenefit().withSnackType().buildClass();
+    const employee = EmployeeBuilder.aEmployee().buildClassWithOneBenefit();
+    employee.addBenefit(snackBenefit);
+    const benefitsOrError = employee.calculateBenefits({
+      worksDays: 10,
+    });
+    const benefits = benefitsOrError.value as Benefit[];
+    const benefitDaily = benefits.find(
+      benefit => benefit.frequency === 'Daily',
+    );
+    const benefitMonthly = benefits.find(
+      benefit => benefit.frequency === 'Monthly',
+    );
+
+    expect(benefitsOrError.isSuccess()).toBe(true);
+    expect(benefits).toHaveLength(2);
+    expect(benefitDaily.value).toEqual(220);
+    expect(benefitMonthly.value).toEqual(150);
+  });
 });
