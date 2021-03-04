@@ -1,5 +1,5 @@
 import { Either, fail, success } from '../../shared/either';
-import Benefit, { Frequency } from './benefit';
+import Benefit, { BenefitType, Frequency } from './benefit';
 import Contract from './contract';
 import { EmployeeData } from './employee-data';
 import { InvalidContractError } from './errors/invalid-contract';
@@ -74,9 +74,7 @@ export default class Employee {
     }
 
     if (this.medicalLeave) {
-      return success(
-        this.#benefits.filter(benefit => benefit.type === 'Snack'),
-      );
+      return success(this.getBenefitsByType('Snack'));
     }
 
     const totalDays = worksDays + daysAtHomeOffice;
@@ -87,6 +85,10 @@ export default class Employee {
     );
 
     return success([...benefitsMonthly, ...benefitsDaily]);
+  }
+
+  private getBenefitsByType(type: BenefitType) {
+    return this.#benefits.filter(benefit => benefit.type === type);
   }
 
   private getBenefitsByFrequency(frequency: Frequency) {
