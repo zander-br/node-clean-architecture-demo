@@ -65,9 +65,9 @@ export default class Employee {
     return success(benefit);
   }
 
-  public calculateBenefits(
-    data: CalculateBenefitsParms,
-  ): Either<BenefitsEmptyError, Benefit[]> {
+  public calculateBenefits({
+    worksDays,
+  }: CalculateBenefitsParms): Either<BenefitsEmptyError, Benefit[]> {
     if (!this.hasBenefits()) {
       return fail(new BenefitsEmptyError());
     }
@@ -78,7 +78,19 @@ export default class Employee {
       );
     }
 
-    return success(this.#benefits);
+    const benefitsDaily = this.#benefits
+      .filter(benefit => benefit.frequency === 'Daily')
+      .map(benefit => {
+        const value = benefit.value * worksDays;
+        const calculateBenefit = Benefit.create({ ...benefit, value });
+        return calculateBenefit.value as Benefit;
+      });
+
+    const benefitsMonthly = this.#benefits.filter(
+      benefit => benefit.frequency === 'Monthly',
+    );
+
+    return success([...benefitsDaily, ...benefitsMonthly]);
   }
 
   public hasBenefits = (): boolean => this.#benefits.length > 0;
