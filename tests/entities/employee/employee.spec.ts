@@ -177,13 +177,15 @@ describe('Employee domain entity', () => {
   });
 
   test('should consider days in home office for employees who do not have a mealVoucherDiscount', () => {
-    const employee = EmployeeBuilder.aEmployee()
+    const employeeWithoutMealVoucherDiscount = EmployeeBuilder.aEmployee()
       .withoutMealVoucherDiscount()
       .buildClassWithOneBenefit();
-    const benefitsOrError = employee.calculateBenefits({
-      worksDays: 10,
-      daysAtHomeOffice: 10,
-    });
+    const benefitsOrError = employeeWithoutMealVoucherDiscount.calculateBenefits(
+      {
+        worksDays: 10,
+        daysAtHomeOffice: 10,
+      },
+    );
     const benefits = benefitsOrError.value as Benefit[];
 
     expect(benefitsOrError.isSuccess()).toBe(true);
