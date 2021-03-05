@@ -156,89 +156,87 @@ describe('Employee domain entity', () => {
   });
 
   test('should be able calculate benefits by spending the working days', () => {
+    const foodBenefit = BenefitBuilder.aBenefit().buildClass();
     const snackBenefit = BenefitBuilder.aBenefit().withSnackType().buildClass();
-    const employee = EmployeeBuilder.aEmployee().buildClassWithOneBenefit();
+    const employee = EmployeeBuilder.aEmployee().buildClass();
+    employee.addBenefit(foodBenefit);
     employee.addBenefit(snackBenefit);
-    const benefitsOrError = employee.calculateBenefits({
-      worksDays: 10,
-    });
-    const benefits = benefitsOrError.value as Benefit[];
-    const benefitDaily = benefits.find(
-      benefit => benefit.frequency === 'Daily',
-    );
-    const benefitMonthly = benefits.find(
-      benefit => benefit.frequency === 'Monthly',
-    );
 
-    expect(benefitsOrError.isSuccess()).toBe(true);
+    const benefits = employee.calculateBenefits({ worksDays: 10 })
+      .value as Benefit[];
+
     expect(benefits).toHaveLength(2);
-    expect(benefitDaily.value).toEqual(220);
-    expect(benefitMonthly.value).toEqual(150);
+    expect(benefits).toContainEqual({ ...snackBenefit, value: 150 });
+    expect(benefits).toContainEqual({ ...foodBenefit, value: 220 });
   });
 
   test('should consider days in home office for employees who do not have a mealVoucherDiscount', () => {
+    const foodBenefit = BenefitBuilder.aBenefit().buildClass();
     const employeeWithoutDiscount = EmployeeBuilder.aEmployee()
       .withoutMealVoucherDiscount()
-      .buildClassWithOneBenefit();
-    const benefitsOrError = employeeWithoutDiscount.calculateBenefits({
+      .buildClass();
+    employeeWithoutDiscount.addBenefit(foodBenefit);
+
+    const benefits = employeeWithoutDiscount.calculateBenefits({
       worksDays: 10,
       daysAtHomeOffice: 10,
-    });
-    const benefits = benefitsOrError.value as Benefit[];
+    }).value as Benefit[];
 
-    expect(benefitsOrError.isSuccess()).toBe(true);
     expect(benefits).toHaveLength(1);
-    expect(benefits[0].value).toEqual(440);
+    expect(benefits).toContainEqual({ ...foodBenefit, value: 440 });
   });
 
   test('should not consider days in the home office for employees who have a mealVoucherDiscount', () => {
-    const employeeWithDiscount = EmployeeBuilder.aEmployee().buildClassWithOneBenefit();
-    const benefitsOrError = employeeWithDiscount.calculateBenefits({
+    const foodBenefit = BenefitBuilder.aBenefit().buildClass();
+    const employeeWithDiscount = EmployeeBuilder.aEmployee().buildClass();
+    employeeWithDiscount.addBenefit(foodBenefit);
+
+    const benefits = employeeWithDiscount.calculateBenefits({
       worksDays: 10,
       daysAtHomeOffice: 10,
-    });
-    const benefits = benefitsOrError.value as Benefit[];
+    }).value as Benefit[];
 
-    expect(benefitsOrError.isSuccess()).toBe(true);
     expect(benefits).toHaveLength(1);
-    expect(benefits[0].value).toEqual(220);
+    expect(benefits).toContainEqual({ ...foodBenefit, value: 220 });
   });
 
   test('should consider days in home office for employees who do not have a transportationVoucherDiscount', () => {
+    const foodBenefit = BenefitBuilder.aBenefit().buildClass();
     const transportationBenefit = BenefitBuilder.aBenefit()
       .withTransportType()
       .buildClass();
     const employeeWithoutDiscount = EmployeeBuilder.aEmployee()
       .withoutTransportationVoucherDiscount()
-      .buildClassWithOneBenefit();
+      .buildClass();
+    employeeWithoutDiscount.addBenefit(foodBenefit);
     employeeWithoutDiscount.addBenefit(transportationBenefit);
-    const benefitsOrError = employeeWithoutDiscount.calculateBenefits({
+
+    const benefits = employeeWithoutDiscount.calculateBenefits({
       worksDays: 10,
       daysAtHomeOffice: 10,
-    });
-    const benefits = benefitsOrError.value as Benefit[];
+    }).value as Benefit[];
 
-    expect(benefitsOrError.isSuccess()).toBe(true);
     expect(benefits).toHaveLength(2);
-    expect(benefits[0].value).toEqual(220);
-    expect(benefits[1].value).toEqual(176);
+    expect(benefits).toContainEqual({ ...foodBenefit, value: 220 });
+    expect(benefits).toContainEqual({ ...transportationBenefit, value: 176 });
   });
 
   test('should not consider days in the home office for employees who have a transportationVoucherDiscount', () => {
+    const foodBenefit = BenefitBuilder.aBenefit().buildClass();
     const transportationBenefit = BenefitBuilder.aBenefit()
       .withTransportType()
       .buildClass();
-    const employeeWithDiscount = EmployeeBuilder.aEmployee().buildClassWithOneBenefit();
+    const employeeWithDiscount = EmployeeBuilder.aEmployee().buildClass();
+    employeeWithDiscount.addBenefit(foodBenefit);
     employeeWithDiscount.addBenefit(transportationBenefit);
-    const benefitsOrError = employeeWithDiscount.calculateBenefits({
+
+    const benefits = employeeWithDiscount.calculateBenefits({
       worksDays: 10,
       daysAtHomeOffice: 10,
-    });
-    const benefits = benefitsOrError.value as Benefit[];
+    }).value as Benefit[];
 
-    expect(benefitsOrError.isSuccess()).toBe(true);
     expect(benefits).toHaveLength(2);
-    expect(benefits[0].value).toEqual(220);
-    expect(benefits[1].value).toEqual(88);
+    expect(benefits).toContainEqual({ ...foodBenefit, value: 220 });
+    expect(benefits).toContainEqual({ ...transportationBenefit, value: 88 });
   });
 });
