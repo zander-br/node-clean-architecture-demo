@@ -229,4 +229,24 @@ describe('Employee domain entity', () => {
     expect(benefits[0].value).toEqual(220);
     expect(benefits[1].value).toEqual(176);
   });
+
+  test('should not consider days in the home office for employees who have a transportationVoucherDiscount', () => {
+    const transportationBenefit = BenefitBuilder.aBenefit()
+      .withTransportType()
+      .buildClass();
+    const employeeWithTransportationVoucherDiscount = EmployeeBuilder.aEmployee().buildClassWithOneBenefit();
+    employeeWithTransportationVoucherDiscount.addBenefit(transportationBenefit);
+    const benefitsOrError = employeeWithTransportationVoucherDiscount.calculateBenefits(
+      {
+        worksDays: 10,
+        daysAtHomeOffice: 10,
+      },
+    );
+    const benefits = benefitsOrError.value as Benefit[];
+
+    expect(benefitsOrError.isSuccess()).toBe(true);
+    expect(benefits).toHaveLength(2);
+    expect(benefits[0].value).toEqual(220);
+    expect(benefits[1].value).toEqual(88);
+  });
 });
