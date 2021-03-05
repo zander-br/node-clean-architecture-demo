@@ -78,6 +78,13 @@ export default class BenefitBuilder {
     return this;
   }
 
+  public withTransportType(): BenefitBuilder {
+    this.benefit.type = 'Transport';
+    this.benefit.value = 8.8;
+    this.benefit.name = 'Bilhete Único';
+    return this;
+  }
+
   public withInvalidFrequencyForFuel(): BenefitBuilder {
     this.benefit.frequency = 'Daily';
     this.benefit.type = 'Fuel';

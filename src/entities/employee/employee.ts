@@ -79,12 +79,25 @@ export default class Employee {
 
     const totalDays = worksDays + daysAtHomeOffice;
     const foodDays = this.mealVoucherDiscount ? worksDays : totalDays;
-    const benefitsMonthly = this.getBenefitsByFrequency('Monthly');
-    const benefitsDaily = this.getBenefitsByFrequency('Daily').map(benefit =>
-      this.calculateBenefitValue(benefit, foodDays),
-    );
+    const transportationDays = this.transportationVoucherDiscount
+      ? worksDays
+      : totalDays;
 
-    return success([...benefitsMonthly, ...benefitsDaily]);
+    const benefitsMonthly = this.getBenefitsByFrequency('Monthly');
+    const benefitsDaily = this.getBenefitsByFrequency('Daily');
+
+    const foodsBenefits = benefitsDaily
+      .filter(benefit => benefit.type === 'Food')
+      .map(benefit => this.calculateBenefitValue(benefit, foodDays));
+    const transportationsBenefits = benefitsDaily
+      .filter(benefit => benefit.type === 'Transport')
+      .map(benefit => this.calculateBenefitValue(benefit, transportationDays));
+
+    return success([
+      ...benefitsMonthly,
+      ...foodsBenefits,
+      ...transportationsBenefits,
+    ]);
   }
 
   public getBenefitsByType(type: BenefitType): Benefit[] {
