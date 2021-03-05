@@ -177,15 +177,13 @@ describe('Employee domain entity', () => {
   });
 
   test('should consider days in home office for employees who do not have a mealVoucherDiscount', () => {
-    const employeeWithoutMealVoucherDiscount = EmployeeBuilder.aEmployee()
+    const employeeWithoutDiscount = EmployeeBuilder.aEmployee()
       .withoutMealVoucherDiscount()
       .buildClassWithOneBenefit();
-    const benefitsOrError = employeeWithoutMealVoucherDiscount.calculateBenefits(
-      {
-        worksDays: 10,
-        daysAtHomeOffice: 10,
-      },
-    );
+    const benefitsOrError = employeeWithoutDiscount.calculateBenefits({
+      worksDays: 10,
+      daysAtHomeOffice: 10,
+    });
     const benefits = benefitsOrError.value as Benefit[];
 
     expect(benefitsOrError.isSuccess()).toBe(true);
@@ -194,8 +192,8 @@ describe('Employee domain entity', () => {
   });
 
   test('should not consider days in the home office for employees who have a mealVoucherDiscount', () => {
-    const employeeWithMealVoucherDiscount = EmployeeBuilder.aEmployee().buildClassWithOneBenefit();
-    const benefitsOrError = employeeWithMealVoucherDiscount.calculateBenefits({
+    const employeeWithDiscount = EmployeeBuilder.aEmployee().buildClassWithOneBenefit();
+    const benefitsOrError = employeeWithDiscount.calculateBenefits({
       worksDays: 10,
       daysAtHomeOffice: 10,
     });
@@ -210,18 +208,14 @@ describe('Employee domain entity', () => {
     const transportationBenefit = BenefitBuilder.aBenefit()
       .withTransportType()
       .buildClass();
-    const employeeWithoutTransportationVoucherDiscount = EmployeeBuilder.aEmployee()
+    const employeeWithoutDiscount = EmployeeBuilder.aEmployee()
       .withoutTransportationVoucherDiscount()
       .buildClassWithOneBenefit();
-    employeeWithoutTransportationVoucherDiscount.addBenefit(
-      transportationBenefit,
-    );
-    const benefitsOrError = employeeWithoutTransportationVoucherDiscount.calculateBenefits(
-      {
-        worksDays: 10,
-        daysAtHomeOffice: 10,
-      },
-    );
+    employeeWithoutDiscount.addBenefit(transportationBenefit);
+    const benefitsOrError = employeeWithoutDiscount.calculateBenefits({
+      worksDays: 10,
+      daysAtHomeOffice: 10,
+    });
     const benefits = benefitsOrError.value as Benefit[];
 
     expect(benefitsOrError.isSuccess()).toBe(true);
@@ -234,14 +228,12 @@ describe('Employee domain entity', () => {
     const transportationBenefit = BenefitBuilder.aBenefit()
       .withTransportType()
       .buildClass();
-    const employeeWithTransportationVoucherDiscount = EmployeeBuilder.aEmployee().buildClassWithOneBenefit();
-    employeeWithTransportationVoucherDiscount.addBenefit(transportationBenefit);
-    const benefitsOrError = employeeWithTransportationVoucherDiscount.calculateBenefits(
-      {
-        worksDays: 10,
-        daysAtHomeOffice: 10,
-      },
-    );
+    const employeeWithDiscount = EmployeeBuilder.aEmployee().buildClassWithOneBenefit();
+    employeeWithDiscount.addBenefit(transportationBenefit);
+    const benefitsOrError = employeeWithDiscount.calculateBenefits({
+      worksDays: 10,
+      daysAtHomeOffice: 10,
+    });
     const benefits = benefitsOrError.value as Benefit[];
 
     expect(benefitsOrError.isSuccess()).toBe(true);
