@@ -1,11 +1,11 @@
-import BenefitBuilder from '../builders/benefit-builder';
-import { fail } from '../../../src/shared/either';
-import Benefit from '../../../src/entities/employee/benefit';
+import { fail } from '@/shared/either';
+import Benefit from '@/entities/employee/benefit';
 import {
   InvalidBenefitFrequencyError,
   InvalidBenefitNameError,
   InvalidBenefitValueError,
-} from '../../../src/entities/employee/errors/invalid-benefit';
+} from '@/entities/employee/errors/invalid-benefit';
+import BenefitBuilder from '@/tests/entities/builders/benefit-builder';
 
 describe('Benefit domain value object', () => {
   test('should not create benefit with invalid name (too few characters)', () => {

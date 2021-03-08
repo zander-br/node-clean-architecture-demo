@@ -1,15 +1,15 @@
-import { InvalidNameError } from '../../../src/entities/employee/errors/invalid-name';
-import { InvalidContractError } from '../../../src/entities/employee/errors/invalid-contract';
+import { InvalidNameError } from '@/entities/employee/errors/invalid-name';
+import { InvalidContractError } from '@/entities/employee/errors/invalid-contract';
 import {
   BenefitsEmptyError,
   DuplicateBenefitError,
   UniqueBenefitError,
-} from '../../../src/entities/employee/errors/invalid-employee';
-import Employee from '../../../src/entities/employee/employee';
-import { fail } from '../../../src/shared/either';
-import BenefitBuilder from '../builders/benefit-builder';
-import EmployeeBuilder from '../builders/employee-builder';
-import Benefit from '../../../src/entities/employee/benefit';
+} from '@/entities/employee/errors/invalid-employee';
+import Employee from '@/entities/employee/employee';
+import { fail } from '@/shared/either';
+import Benefit from '@/entities/employee/benefit';
+import EmployeeBuilder from '@/tests/entities/builders/employee-builder';
+import BenefitBuilder from '@/tests/entities/builders/benefit-builder';
 
 describe('Employee domain entity', () => {
   test('should not create employee with invalid name', () => {

@@ -1,6 +1,6 @@
-import { InvalidContractError } from '../../../src/entities/employee/errors/invalid-contract';
-import Contract from '../../../src/entities/employee/contract';
-import { fail } from '../../../src/shared/either';
+import { InvalidContractError } from '@/entities/employee/errors/invalid-contract';
+import Contract from '@/entities/employee/contract';
+import { fail } from '@/shared/either';
 
 describe('Contract domain value object', () => {
   test('should not create contract with invalid parameter (too few characters)', () => {

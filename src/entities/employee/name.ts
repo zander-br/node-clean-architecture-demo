@@ -1,4 +1,4 @@
-import { Either, fail, success } from '../../shared/either';
+import { Either, fail, success } from '@/shared/either';
 import { InvalidNameError } from './errors/invalid-name';
 
 export default class Name {

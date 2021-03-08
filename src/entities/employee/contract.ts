@@ -1,4 +1,4 @@
-import { Either, fail, success } from '../../shared/either';
+import { Either, fail, success } from '@/shared/either';
 import { InvalidContractError } from './errors/invalid-contract';
 
 export default class Contract {

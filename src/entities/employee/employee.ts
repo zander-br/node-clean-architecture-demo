@@ -1,4 +1,4 @@
-import { Either, fail, success } from '../../shared/either';
+import { Either, fail, success } from '@/shared/either';
 import Benefit, { BenefitType, Frequency } from './benefit';
 import Contract from './contract';
 import { EmployeeData } from './employee-data';

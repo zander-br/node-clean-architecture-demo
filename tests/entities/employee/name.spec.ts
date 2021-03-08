@@ -1,4 +1,4 @@
-import { InvalidNameError } from '../../../src/entities/employee/errors/invalid-name';
+import { InvalidNameError } from '@/entities/employee/errors/invalid-name';
 import Name from '../../../src/entities/employee/name';
 import { fail } from '../../../src/shared/either';
 

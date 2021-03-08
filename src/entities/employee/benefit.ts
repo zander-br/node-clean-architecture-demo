@@ -1,4 +1,4 @@
-import { Either, fail, success } from '../../shared/either';
+import { Either, fail, success } from '@/shared/either';
 import { BenefitData } from './benefit-data';
 import {
   InvalidBenefitFrequencyError,
