@@ -7,14 +7,25 @@ import { CalculateEmployeeBenefitsResponse } from './calculate-employee-benefit-
 export default class CalculateEmployeeBenefits {
   constructor(private readonly employeeRepository: EmployeeRepository) {}
 
-  async execute({
-    name,
-  }: CalculateBenefitsData): Promise<CalculateEmployeeBenefitsResponse> {
+  async execute(
+    calculateBenefitsData: CalculateBenefitsData,
+  ): Promise<CalculateEmployeeBenefitsResponse> {
+    const { name } = calculateBenefitsData;
     const employee = await this.employeeRepository.findByName(name);
     if (!employee) {
       return fail(new NotFoundEmployeeError(name));
     }
 
-    return success(true);
+    const calculateBenefitsOrError = employee.calculateBenefits(
+      calculateBenefitsData,
+    );
+
+    if (calculateBenefitsOrError.isFail()) {
+      return fail(calculateBenefitsOrError.value);
+    }
+
+    const benefits = calculateBenefitsOrError.value;
+
+    return success(benefits);
   }
 }
