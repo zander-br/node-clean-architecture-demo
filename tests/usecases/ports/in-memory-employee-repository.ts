@@ -6,7 +6,7 @@ export default class InMemoryEmployeeRepository implements EmployeeRepository {
   private readonly employees: Employee[] = [];
 
   constructor() {
-    const employee = EmployeeDataBuilder.aEmployee().buildClass();
+    const employee = EmployeeDataBuilder.aEmployee().buildClassWithOneBenefit();
     this.employees.push(employee);
   }
 

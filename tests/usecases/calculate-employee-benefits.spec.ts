@@ -51,4 +51,19 @@ describe('Calculate employee benefits use case', () => {
     expect(error.value).toEqual(new BenefitsEmptyError());
     expect(error.isFail()).toBeTruthy();
   });
+
+  test('should return calculate benefits', async () => {
+    const { sut } = makeSut();
+    const calculateData = { name: 'Anderson Santos', worksDays: 10 };
+    const response = await sut.execute(calculateData);
+
+    expect(response.isSuccess()).toBeTruthy();
+    expect(response.value).toHaveLength(1);
+    expect(response.value).toContainEqual({
+      name: 'VR Refeição',
+      value: 220,
+      type: 'Food',
+      frequency: 'Daily',
+    });
+  });
 });
