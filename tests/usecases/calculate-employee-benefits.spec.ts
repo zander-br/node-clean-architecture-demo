@@ -1,6 +1,8 @@
+import { BenefitsEmptyError } from '@/entities/employee/errors/invalid-employee';
 import CalculateEmployeeBenefits from '@/usecases/calculate-employee-benefits/calculate-employee-benefits';
 import { NotFoundEmployeeError } from '@/usecases/errors/calculate-employee-benefits';
 import { EmployeeRepository } from '@/usecases/ports/employee-repository';
+import EmployeeDataBuilder from '../entities/builders/employee-builder';
 import InMemoryEmployeeRepository from './ports/in-memory-employee-repository';
 
 type SutTypes = {
@@ -30,5 +32,23 @@ describe('Calculate employee benefits use case', () => {
     await sut.execute(calculateData);
 
     expect(findByNameSpy).toHaveBeenCalledWith(calculateData.name);
+  });
+
+  test('should not calculate benefit when the employee benefits is empty', async () => {
+    const { sut, employeeRepositorySpy } = makeSut();
+    const calculateData = {
+      name: 'Anderson Santos',
+      worksDays: 10,
+    };
+    const mockWithoutBenefits = EmployeeDataBuilder.aEmployee().buildClass();
+    jest
+      .spyOn(employeeRepositorySpy, 'findByName')
+      .mockReturnValueOnce(
+        new Promise(resolve => resolve(mockWithoutBenefits)),
+      );
+
+    const error = await sut.execute(calculateData);
+    expect(error.value).toEqual(new BenefitsEmptyError());
+    expect(error.isFail()).toBeTruthy();
   });
 });
