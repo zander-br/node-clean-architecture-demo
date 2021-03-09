@@ -22,4 +22,13 @@ describe('Calculate employee benefits use case', () => {
     expect(error.value).toEqual(new NotFoundEmployeeError(calculateData.name));
     expect(error.isFail()).toBeTruthy();
   });
+
+  test('should call findByName with correct value', async () => {
+    const { sut, employeeRepositorySpy } = makeSut();
+    const calculateData = { name: 'Anderson Santos', worksDays: 10 };
+    const findByNameSpy = jest.spyOn(employeeRepositorySpy, 'findByName');
+    await sut.execute(calculateData);
+
+    expect(findByNameSpy).toHaveBeenCalledWith(calculateData.name);
+  });
 });
