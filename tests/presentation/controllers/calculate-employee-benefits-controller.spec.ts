@@ -1,5 +1,6 @@
 import { CalculateEmployeeBenefitsController } from '@/presentation/controllers/calculate-employee-benefits-controller';
 import { ICalculateEmployeeBenefits } from '@/usecases/calculate-employee-benefits';
+import { serverError } from '@/presentation/helpers';
 import { CalculateEmployeeBenefitsMock } from '../mocks/mock-calculate-employee-benefits';
 
 type SutTypes = {
@@ -20,7 +21,7 @@ const makeSut = (): SutTypes => {
 };
 
 describe('CalculateEmployeeBenefits Controller', () => {
-  test('should call calculateEmployeeBenefits with correct values', async () => {
+  test('should call CalculateEmployeeBenefits with correct values', async () => {
     const { sut, calculateEmployeeBenefitsMock } = makeSut();
     const calculateEmployeeBenefitsSpy = jest.spyOn(
       calculateEmployeeBenefitsMock,
@@ -29,5 +30,16 @@ describe('CalculateEmployeeBenefits Controller', () => {
     const request = { name: 'Anderson Santos', worksDays: 10 };
     await sut.handle(request);
     expect(calculateEmployeeBenefitsSpy).toHaveBeenCalledWith(request);
+  });
+
+  test('should return 500 if CalculateEmployeeBenefits throws', async () => {
+    const { sut, calculateEmployeeBenefitsMock } = makeSut();
+    jest
+      .spyOn(calculateEmployeeBenefitsMock, 'execute')
+      .mockReturnValueOnce(new Promise((_, reject) => reject(new Error())));
+    const request = { name: 'Anderson Santos', worksDays: 10 };
+    const httpResponse = await sut.handle(request);
+
+    expect(httpResponse).toEqual(serverError(new Error()));
   });
 });
