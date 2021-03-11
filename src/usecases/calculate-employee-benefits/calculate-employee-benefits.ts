@@ -3,8 +3,10 @@ import { NotFoundEmployeeError } from '../errors/calculate-employee-benefits';
 import { EmployeeRepository } from '../ports/employee-repository';
 import { CalculateBenefitsData } from './calculate-benefits-data';
 import { CalculateEmployeeBenefitsResponse } from './calculate-employee-benefit-response';
+import { ICalculateEmployeeBenefits } from '../calculate-employee-benefits';
 
-export default class CalculateEmployeeBenefits {
+export default class CalculateEmployeeBenefits
+  implements ICalculateEmployeeBenefits {
   constructor(private readonly employeeRepository: EmployeeRepository) {}
 
   async execute(
