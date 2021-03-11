@@ -20,6 +20,11 @@ const makeSut = (): SutTypes => {
   };
 };
 
+const mockRequest = (): CalculateEmployeeBenefitsController.Request => ({
+  name: 'Anderson Santos',
+  worksDays: 10,
+});
+
 describe('CalculateEmployeeBenefits Controller', () => {
   test('should call CalculateEmployeeBenefits with correct values', async () => {
     const { sut, calculateEmployeeBenefitsMock } = makeSut();
@@ -27,7 +32,7 @@ describe('CalculateEmployeeBenefits Controller', () => {
       calculateEmployeeBenefitsMock,
       'execute',
     );
-    const request = { name: 'Anderson Santos', worksDays: 10 };
+    const request = mockRequest();
     await sut.handle(request);
     expect(calculateEmployeeBenefitsSpy).toHaveBeenCalledWith(request);
   });
@@ -37,8 +42,7 @@ describe('CalculateEmployeeBenefits Controller', () => {
     jest
       .spyOn(calculateEmployeeBenefitsMock, 'execute')
       .mockReturnValueOnce(new Promise((_, reject) => reject(new Error())));
-    const request = { name: 'Anderson Santos', worksDays: 10 };
-    const httpResponse = await sut.handle(request);
+    const httpResponse = await sut.handle(mockRequest());
 
     expect(httpResponse).toEqual(serverError(new Error()));
   });
