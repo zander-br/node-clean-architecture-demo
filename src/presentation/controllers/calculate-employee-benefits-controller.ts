@@ -12,7 +12,10 @@ export class CalculateEmployeeBenefitsController implements Controller {
     request: CalculateEmployeeBenefitsController.Request,
   ): Promise<HttpResponse> {
     try {
-      this.validation.validate(request);
+      const error = this.validation.validate(request);
+      if (error) {
+        return badRequest(error);
+      }
 
       const calculateEmployeeBenefitsResponse = await this.calculateEmployeeBenefits.execute(
         request,
