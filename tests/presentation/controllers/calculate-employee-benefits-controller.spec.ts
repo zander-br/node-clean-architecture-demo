@@ -43,6 +43,14 @@ describe('CalculateEmployeeBenefits Controller', () => {
     expect(validationMock.input).toEqual(request);
   });
 
+  test('should return 400 if Validation fails', async () => {
+    const { sut, validationMock } = makeSut();
+    validationMock.error = new Error();
+    const httpResponse = await sut.handle(mockRequest());
+
+    expect(httpResponse).toEqual(badRequest(validationMock.error));
+  });
+
   test('should call CalculateEmployeeBenefits with correct values', async () => {
     const { sut, calculateEmployeeBenefitsMock } = makeSut();
     const calculateEmployeeBenefitsSpy = jest.spyOn(
