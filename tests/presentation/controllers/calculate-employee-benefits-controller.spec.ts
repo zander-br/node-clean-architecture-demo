@@ -1,9 +1,10 @@
 import { CalculateEmployeeBenefitsController } from '@/presentation/controllers/calculate-employee-benefits-controller';
 import { ICalculateEmployeeBenefits } from '@/usecases/calculate-employee-benefits';
-import { badRequest, serverError } from '@/presentation/helpers';
+import { badRequest, ok, serverError } from '@/presentation/helpers';
 import { CalculateBenefitsData } from '@/usecases/calculate-employee-benefits/calculate-benefits-data';
 import { fail } from '@/shared/either';
 import { NotFoundEmployeeError } from '@/usecases/errors/calculate-employee-benefits';
+import BenefitBuilder from '@/tests/entities/builders/benefit-builder';
 import { CalculateEmployeeBenefitsMock } from '../mocks/mock-calculate-employee-benefits';
 
 type SutTypes = {
@@ -63,5 +64,13 @@ describe('CalculateEmployeeBenefits Controller', () => {
     const httpResponse = await sut.handle(mockRequest());
 
     expect(httpResponse).toEqual(serverError(new Error()));
+  });
+
+  test('should return 200 on success', async () => {
+    const { sut } = makeSut();
+    const benefit = BenefitBuilder.aBenefit().buildClass();
+    const httpResponse = await sut.handle(mockRequest());
+
+    expect(httpResponse).toEqual(ok([benefit]));
   });
 });
