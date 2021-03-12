@@ -1,9 +1,10 @@
 import { ICalculateEmployeeBenefits } from '@/usecases/calculate-employee-benefits';
 import { badRequest, ok, serverError } from '../helpers';
-import { Controller, HttpResponse } from '../ports';
+import { Controller, HttpResponse, Validation } from '../ports';
 
 export class CalculateEmployeeBenefitsController implements Controller {
   constructor(
+    private readonly validation: Validation,
     private readonly calculateEmployeeBenefits: ICalculateEmployeeBenefits,
   ) {}
 
@@ -11,6 +12,8 @@ export class CalculateEmployeeBenefitsController implements Controller {
     request: CalculateEmployeeBenefitsController.Request,
   ): Promise<HttpResponse> {
     try {
+      this.validation.validate(request);
+
       const calculateEmployeeBenefitsResponse = await this.calculateEmployeeBenefits.execute(
         request,
       );
