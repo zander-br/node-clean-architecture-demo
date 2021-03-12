@@ -6,21 +6,26 @@ import { fail } from '@/shared/either';
 import { NotFoundEmployeeError } from '@/usecases/errors/calculate-employee-benefits';
 import BenefitBuilder from '@/tests/entities/builders/benefit-builder';
 import { CalculateEmployeeBenefitsMock } from '../mocks/mock-calculate-employee-benefits';
+import { ValidationMock } from '../mocks/mock-validation';
 
 type SutTypes = {
   sut: CalculateEmployeeBenefitsController;
   calculateEmployeeBenefitsMock: ICalculateEmployeeBenefits;
+  validationMock: ValidationMock;
 };
 
 const makeSut = (): SutTypes => {
+  const validationMock = new ValidationMock();
   const calculateEmployeeBenefitsMock = new CalculateEmployeeBenefitsMock();
   const sut = new CalculateEmployeeBenefitsController(
+    validationMock,
     calculateEmployeeBenefitsMock,
   );
 
   return {
     sut,
     calculateEmployeeBenefitsMock,
+    validationMock,
   };
 };
 
@@ -30,6 +35,14 @@ const mockRequest = (): CalculateEmployeeBenefitsController.Request => ({
 });
 
 describe('CalculateEmployeeBenefits Controller', () => {
+  test('should call Validation with correct values', async () => {
+    const { sut, validationMock } = makeSut();
+    const request = mockRequest();
+    await sut.handle(request);
+
+    expect(validationMock.input).toEqual(request);
+  });
+
   test('should call CalculateEmployeeBenefits with correct values', async () => {
     const { sut, calculateEmployeeBenefitsMock } = makeSut();
     const calculateEmployeeBenefitsSpy = jest.spyOn(
