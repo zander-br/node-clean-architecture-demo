@@ -21,4 +21,22 @@ describe('GoogleSheetsEmployee Repository', () => {
     expect(employee).toBeTruthy();
     expect(employee.name.value).toBe(name);
   });
+
+  test('should return null if findByName fails', async () => {
+    const spreadSheetId = process.env.SPREAD_SHEET_ID;
+    const credentials = {
+      client_email: process.env.CLIENT_EMAIL,
+      client_id: process.env.CLIENT_ID,
+      private_key: process.env.PRIVATE_KEY.replace(/\\n/g, '\n'),
+    };
+
+    const employeeRepository = new GoogleSheetsEmployeeRepository(
+      spreadSheetId,
+      credentials,
+    );
+    const name = 'INVALID EMPLOYEE';
+    const employee = await employeeRepository.findByName(name);
+
+    expect(employee).toBeFalsy();
+  });
 });
