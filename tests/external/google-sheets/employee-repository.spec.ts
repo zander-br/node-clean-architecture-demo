@@ -93,4 +93,13 @@ describe('GoogleSheetsEmployee Repository', () => {
     expect(employee.benefits).toHaveLength(1);
     expect(employee.benefits[0].name).toEqual('VR AUTO');
   });
+
+  test('should return an employee with VALE ALIMENTAÇÃO benefit when value greater than zero', async () => {
+    const sut = makeSut();
+    const employee = await sut.findByName('EMPLOYEE WITH VALE ALIMENTAÇÃO');
+
+    expect(employee.hasBenefits()).toBe(true);
+    expect(employee.benefits).toHaveLength(1);
+    expect(employee.benefits[0].name).toEqual('VALE ALIMENTAÇÃO');
+  });
 });
