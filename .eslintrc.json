@@ -38,7 +38,8 @@
     "no-plusplus": "off",
     "no-useless-constructor": "off",
     "@typescript-eslint/no-namespace": "off",
-    "import/export": "off"
+    "import/export": "off",
+    "@typescript-eslint/no-var-requires": "off"
   },
   "settings": {
     "import/resolver": {
