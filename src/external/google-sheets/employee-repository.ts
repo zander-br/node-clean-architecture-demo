@@ -96,6 +96,17 @@ export class GoogleSheetsEmployeeRepository implements EmployeeRepository {
       employee.addBenefit(benefit);
     }
 
+    if (employeeRow['VR AUTO'].trim() !== 'R$  -') {
+      const benefit = Benefit.create({
+        name: 'VR AUTO',
+        value: convertCurrentMoneyInNumber(employeeRow['VR AUTO'].trim()),
+        type: 'Fuel',
+        frequency: 'Monthly',
+      }).value as Benefit;
+
+      employee.addBenefit(benefit);
+    }
+
     return employee;
   }
 }
