@@ -6,6 +6,8 @@ import {
 import Employee from '@/entities/employee/employee';
 import { EmployeeData } from '@/entities/employee/employee-data';
 import { EmployeeRepository } from '@/usecases/ports/employee-repository';
+import { convertCurrentMoneyInNumber } from '@/shared/utils';
+import Benefit from '@/entities/employee/benefit';
 
 export class GoogleSheetsEmployeeRepository implements EmployeeRepository {
   constructor(
@@ -38,6 +40,17 @@ export class GoogleSheetsEmployeeRepository implements EmployeeRepository {
 
     const employeeOrError = Employee.create(employeeData);
     const employee = employeeOrError.value as Employee;
+
+    if (employeeRow.BOM.trim() !== 'R$  -') {
+      const benefit = Benefit.create({
+        name: 'BOM',
+        value: convertCurrentMoneyInNumber(employeeRow.BOM.trim()),
+        type: 'Transport',
+        frequency: 'Daily',
+      }).value as Benefit;
+
+      employee.addBenefit(benefit);
+    }
 
     return employee;
   }
