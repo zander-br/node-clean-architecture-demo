@@ -63,6 +63,17 @@ export class GoogleSheetsEmployeeRepository implements EmployeeRepository {
       employee.addBenefit(benefit);
     }
 
+    if (employeeRow['BEN FÁCIL'].trim() !== 'R$  -') {
+      const benefit = Benefit.create({
+        name: 'BEN FÁCIL',
+        value: convertCurrentMoneyInNumber(employeeRow['BEN FÁCIL'].trim()),
+        type: 'Transport',
+        frequency: 'Daily',
+      }).value as Benefit;
+
+      employee.addBenefit(benefit);
+    }
+
     return employee;
   }
 }
