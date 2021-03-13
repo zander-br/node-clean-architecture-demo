@@ -57,4 +57,22 @@ describe('GoogleSheetsEmployee Repository', () => {
     expect(employee.benefits).toHaveLength(1);
     expect(employee.benefits[0].name).toEqual('BEN FÁCIL');
   });
+
+  test('should return an employee with BEN FÁCIL benefit when value greater than zero', async () => {
+    const sut = makeSut();
+    const employee = await sut.findByName('EMPLOYEE WITH BEN FÁCIL');
+
+    expect(employee.hasBenefits()).toBe(true);
+    expect(employee.benefits).toHaveLength(1);
+    expect(employee.benefits[0].name).toEqual('BEN FÁCIL');
+  });
+
+  test('should return an employee with BEM OSASCO benefit when value greater than zero', async () => {
+    const sut = makeSut();
+    const employee = await sut.findByName('EMPLOYEE WITH BEM OSASCO');
+
+    expect(employee.hasBenefits()).toBe(true);
+    expect(employee.benefits).toHaveLength(1);
+    expect(employee.benefits[0].name).toEqual('BEM OSASCO');
+  });
 });
