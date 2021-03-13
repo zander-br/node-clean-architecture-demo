@@ -84,4 +84,13 @@ describe('GoogleSheetsEmployee Repository', () => {
     expect(employee.benefits).toHaveLength(1);
     expect(employee.benefits[0].name).toEqual('SIM MAUÁ');
   });
+
+  test('should return an employee with VR AUTO benefit when value greater than zero', async () => {
+    const sut = makeSut();
+    const employee = await sut.findByName('EMPLOYEE WITH VR AUTO');
+
+    expect(employee.hasBenefits()).toBe(true);
+    expect(employee.benefits).toHaveLength(1);
+    expect(employee.benefits[0].name).toEqual('VR AUTO');
+  });
 });
