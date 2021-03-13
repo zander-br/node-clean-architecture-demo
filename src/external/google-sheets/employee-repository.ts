@@ -85,6 +85,17 @@ export class GoogleSheetsEmployeeRepository implements EmployeeRepository {
       employee.addBenefit(benefit);
     }
 
+    if (employeeRow['SIM MAUÁ'].trim() !== 'R$  -') {
+      const benefit = Benefit.create({
+        name: 'SIM MAUÁ',
+        value: convertCurrentMoneyInNumber(employeeRow['SIM MAUÁ'].trim()),
+        type: 'Transport',
+        frequency: 'Daily',
+      }).value as Benefit;
+
+      employee.addBenefit(benefit);
+    }
+
     return employee;
   }
 }
