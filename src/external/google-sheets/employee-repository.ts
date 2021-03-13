@@ -120,6 +120,17 @@ export class GoogleSheetsEmployeeRepository implements EmployeeRepository {
       employee.addBenefit(benefit);
     }
 
+    if (employeeRow['VALE REFEIÇÃO'].trim() !== 'R$  -') {
+      const benefit = Benefit.create({
+        name: 'VALE REFEIÇÃO',
+        value: convertCurrentMoneyInNumber(employeeRow['VALE REFEIÇÃO'].trim()),
+        type: 'Food',
+        frequency: 'Daily',
+      }).value as Benefit;
+
+      employee.addBenefit(benefit);
+    }
+
     return employee;
   }
 }
