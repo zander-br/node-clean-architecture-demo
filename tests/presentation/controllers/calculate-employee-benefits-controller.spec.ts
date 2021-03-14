@@ -5,27 +5,23 @@ import { CalculateBenefitsData } from '@/usecases/calculate-employee-benefits/ca
 import { fail } from '@/shared/either';
 import { NotFoundEmployeeError } from '@/usecases/errors/calculate-employee-benefits';
 import BenefitBuilder from '@/tests/entities/builders/benefit-builder';
+import { MissingParamError } from '@/presentation/errors';
 import { CalculateEmployeeBenefitsMock } from '../mocks/mock-calculate-employee-benefits';
-import { ValidationMock } from '../mocks/mock-validation';
 
 type SutTypes = {
   sut: CalculateEmployeeBenefitsController;
   calculateEmployeeBenefitsMock: ICalculateEmployeeBenefits;
-  validationMock: ValidationMock;
 };
 
 const makeSut = (): SutTypes => {
-  const validationMock = new ValidationMock();
   const calculateEmployeeBenefitsMock = new CalculateEmployeeBenefitsMock();
   const sut = new CalculateEmployeeBenefitsController(
-    validationMock,
     calculateEmployeeBenefitsMock,
   );
 
   return {
     sut,
     calculateEmployeeBenefitsMock,
-    validationMock,
   };
 };
 
@@ -35,20 +31,11 @@ const mockRequest = (): CalculateEmployeeBenefitsController.Request => ({
 });
 
 describe('CalculateEmployeeBenefits Controller', () => {
-  test('should call Validation with correct values', async () => {
-    const { sut, validationMock } = makeSut();
-    const request = mockRequest();
-    await sut.handle(request);
+  test('should return 400 if no name is provided', async () => {
+    const { sut } = makeSut();
+    const httpResponse = await sut.handle({ name: null, worksDays: 10 });
 
-    expect(validationMock.input).toEqual(request);
-  });
-
-  test('should return 400 if Validation fails', async () => {
-    const { sut, validationMock } = makeSut();
-    validationMock.error = new Error();
-    const httpResponse = await sut.handle(mockRequest());
-
-    expect(httpResponse).toEqual(badRequest(validationMock.error));
+    expect(httpResponse).toEqual(badRequest(new MissingParamError('name')));
   });
 
   test('should call CalculateEmployeeBenefits with correct values', async () => {
