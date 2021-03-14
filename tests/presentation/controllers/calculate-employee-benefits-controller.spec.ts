@@ -38,6 +38,18 @@ describe('CalculateEmployeeBenefits Controller', () => {
     expect(httpResponse).toEqual(badRequest(new MissingParamError('name')));
   });
 
+  test('should return 400 if no worksDays is provided', async () => {
+    const { sut } = makeSut();
+    const httpResponse = await sut.handle({
+      name: 'Anderson',
+      worksDays: null,
+    });
+
+    expect(httpResponse).toEqual(
+      badRequest(new MissingParamError('worksDays')),
+    );
+  });
+
   test('should call CalculateEmployeeBenefits with correct values', async () => {
     const { sut, calculateEmployeeBenefitsMock } = makeSut();
     const calculateEmployeeBenefitsSpy = jest.spyOn(
