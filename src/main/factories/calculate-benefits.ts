@@ -2,6 +2,8 @@ import { GoogleSheetsEmployeeRepository } from '@/external/google-sheets/employe
 import { CalculateEmployeeBenefitsController } from '@/presentation/controllers/calculate-employee-benefits-controller';
 import CalculateEmployeeBenefits from '@/usecases/calculate-employee-benefits/calculate-employee-benefits';
 
+require('dotenv-flow').config();
+
 export const makeCalculateEmployeeBenefitsController = (): CalculateEmployeeBenefitsController => {
   const spreadSheetId = process.env.SPREAD_SHEET_ID;
   const credentials = {
