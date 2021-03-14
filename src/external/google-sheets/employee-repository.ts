@@ -41,7 +41,7 @@ export class GoogleSheetsEmployeeRepository implements EmployeeRepository {
     const employeeOrError = Employee.create(employeeData);
     const employee = employeeOrError.value as Employee;
 
-    if (employeeRow.BOM.trim() !== 'R$  -') {
+    if (this.hasValue(employeeRow.BOM)) {
       const benefit = Benefit.create({
         name: 'BOM',
         value: convertCurrentMoneyInNumber(employeeRow.BOM.trim()),
@@ -52,7 +52,7 @@ export class GoogleSheetsEmployeeRepository implements EmployeeRepository {
       employee.addBenefit(benefit);
     }
 
-    if (employeeRow['BILHETE ÚNICO'].trim() !== 'R$  -') {
+    if (this.hasValue(employeeRow['BILHETE ÚNICO'])) {
       const benefit = Benefit.create({
         name: 'BILHETE ÚNICO',
         value: convertCurrentMoneyInNumber(employeeRow['BILHETE ÚNICO'].trim()),
@@ -63,7 +63,7 @@ export class GoogleSheetsEmployeeRepository implements EmployeeRepository {
       employee.addBenefit(benefit);
     }
 
-    if (employeeRow['BEN FÁCIL'].trim() !== 'R$  -') {
+    if (this.hasValue(employeeRow['BEN FÁCIL'])) {
       const benefit = Benefit.create({
         name: 'BEN FÁCIL',
         value: convertCurrentMoneyInNumber(employeeRow['BEN FÁCIL'].trim()),
@@ -74,7 +74,7 @@ export class GoogleSheetsEmployeeRepository implements EmployeeRepository {
       employee.addBenefit(benefit);
     }
 
-    if (employeeRow['BEM OSASCO'].trim() !== 'R$  -') {
+    if (this.hasValue(employeeRow['BEM OSASCO'])) {
       const benefit = Benefit.create({
         name: 'BEM OSASCO',
         value: convertCurrentMoneyInNumber(employeeRow['BEM OSASCO'].trim()),
@@ -85,7 +85,7 @@ export class GoogleSheetsEmployeeRepository implements EmployeeRepository {
       employee.addBenefit(benefit);
     }
 
-    if (employeeRow['SIM MAUÁ'].trim() !== 'R$  -') {
+    if (this.hasValue(employeeRow['SIM MAUÁ'])) {
       const benefit = Benefit.create({
         name: 'SIM MAUÁ',
         value: convertCurrentMoneyInNumber(employeeRow['SIM MAUÁ'].trim()),
@@ -96,7 +96,7 @@ export class GoogleSheetsEmployeeRepository implements EmployeeRepository {
       employee.addBenefit(benefit);
     }
 
-    if (employeeRow['VR AUTO'].trim() !== 'R$  -') {
+    if (this.hasValue(employeeRow['VR AUTO'])) {
       const benefit = Benefit.create({
         name: 'VR AUTO',
         value: convertCurrentMoneyInNumber(employeeRow['VR AUTO'].trim()),
@@ -107,7 +107,7 @@ export class GoogleSheetsEmployeeRepository implements EmployeeRepository {
       employee.addBenefit(benefit);
     }
 
-    if (employeeRow['VALE ALIMENTAÇÃO'].trim() !== 'R$  -') {
+    if (this.hasValue(employeeRow['VALE ALIMENTAÇÃO'])) {
       const benefit = Benefit.create({
         name: 'VALE ALIMENTAÇÃO',
         value: convertCurrentMoneyInNumber(
@@ -120,7 +120,7 @@ export class GoogleSheetsEmployeeRepository implements EmployeeRepository {
       employee.addBenefit(benefit);
     }
 
-    if (employeeRow['VALE REFEIÇÃO'].trim() !== 'R$  -') {
+    if (this.hasValue(employeeRow['VALE REFEIÇÃO'])) {
       const benefit = Benefit.create({
         name: 'VALE REFEIÇÃO',
         value: convertCurrentMoneyInNumber(employeeRow['VALE REFEIÇÃO'].trim()),
@@ -132,5 +132,9 @@ export class GoogleSheetsEmployeeRepository implements EmployeeRepository {
     }
 
     return employee;
+  }
+
+  private hasValue(rowValue: string) {
+    return rowValue.trim() !== 'R$  -' && rowValue.trim();
   }
 }
