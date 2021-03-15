@@ -1,3 +1,4 @@
+import 'dotenv-flow/config';
 import 'module-alias/register';
 
 import app from './config/app';

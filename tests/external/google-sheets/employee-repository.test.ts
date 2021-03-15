@@ -1,6 +1,5 @@
+import 'dotenv-flow/config';
 import { GoogleSheetsEmployeeRepository } from '@/external/google-sheets/employee-repository';
-
-require('dotenv-flow').config();
 
 const makeSut = (): GoogleSheetsEmployeeRepository => {
   const spreadSheetId = process.env.SPREAD_SHEET_ID;

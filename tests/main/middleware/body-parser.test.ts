@@ -1,4 +1,6 @@
+import 'dotenv-flow/config';
 import request from 'supertest';
+
 import app from '@/main/config/app';
 
 describe('Body parser Middleware', () => {
