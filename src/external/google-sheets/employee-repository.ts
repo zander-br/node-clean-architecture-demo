@@ -121,9 +121,11 @@ export class GoogleSheetsEmployeeRepository implements EmployeeRepository {
     row: GoogleSpreadsheetRow,
     name: string,
   ): Benefit {
+    const value = convertCurrentMoneyInNumber(row[name].trim());
+
     const benefit = Benefit.create({
       name,
-      value: convertCurrentMoneyInNumber(row[name].trim()),
+      value,
       type: 'Transport',
       frequency: 'Daily',
     }).value as Benefit;
