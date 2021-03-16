@@ -107,10 +107,7 @@ export class GoogleSheetsEmployeeRepository implements EmployeeRepository {
     this.rows = await worksheet.getRows();
   }
 
-  private createTransportBenefit(
-    row: GoogleSpreadsheetRow,
-    name: string,
-  ): Benefit {
+  private createTransportBenefit(row: GoogleSpreadsheetRow, name: string) {
     const value = convertCurrentMoneyInNumber(row[name].trim());
 
     const benefit = Benefit.create({
