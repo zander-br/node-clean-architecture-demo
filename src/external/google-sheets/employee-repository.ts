@@ -45,58 +45,29 @@ export class GoogleSheetsEmployeeRepository implements EmployeeRepository {
     const employee = employeeOrError.value as Employee;
 
     if (this.hasValue(employeeRow.BOM)) {
-      const benefit = Benefit.create({
-        name: 'BOM',
-        value: convertCurrentMoneyInNumber(employeeRow.BOM.trim()),
-        type: 'Transport',
-        frequency: 'Daily',
-      }).value as Benefit;
-
-      employee.addBenefit(benefit);
+      employee.addBenefit(this.createTransportBenefit(employeeRow, 'BOM'));
     }
 
     if (this.hasValue(employeeRow['BILHETE ÚNICO'])) {
-      const benefit = Benefit.create({
-        name: 'BILHETE ÚNICO',
-        value: convertCurrentMoneyInNumber(employeeRow['BILHETE ÚNICO'].trim()),
-        type: 'Transport',
-        frequency: 'Daily',
-      }).value as Benefit;
-
-      employee.addBenefit(benefit);
+      employee.addBenefit(
+        this.createTransportBenefit(employeeRow, 'BILHETE ÚNICO'),
+      );
     }
 
     if (this.hasValue(employeeRow['BEN FÁCIL'])) {
-      const benefit = Benefit.create({
-        name: 'BEN FÁCIL',
-        value: convertCurrentMoneyInNumber(employeeRow['BEN FÁCIL'].trim()),
-        type: 'Transport',
-        frequency: 'Daily',
-      }).value as Benefit;
-
-      employee.addBenefit(benefit);
+      employee.addBenefit(
+        this.createTransportBenefit(employeeRow, 'BEN FÁCIL'),
+      );
     }
 
     if (this.hasValue(employeeRow['BEM OSASCO'])) {
-      const benefit = Benefit.create({
-        name: 'BEM OSASCO',
-        value: convertCurrentMoneyInNumber(employeeRow['BEM OSASCO'].trim()),
-        type: 'Transport',
-        frequency: 'Daily',
-      }).value as Benefit;
-
-      employee.addBenefit(benefit);
+      employee.addBenefit(
+        this.createTransportBenefit(employeeRow, 'BEM OSASCO'),
+      );
     }
 
     if (this.hasValue(employeeRow['SIM MAUÁ'])) {
-      const benefit = Benefit.create({
-        name: 'SIM MAUÁ',
-        value: convertCurrentMoneyInNumber(employeeRow['SIM MAUÁ'].trim()),
-        type: 'Transport',
-        frequency: 'Daily',
-      }).value as Benefit;
-
-      employee.addBenefit(benefit);
+      employee.addBenefit(this.createTransportBenefit(employeeRow, 'SIM MAUÁ'));
     }
 
     if (this.hasValue(employeeRow['VR AUTO'])) {
@@ -144,6 +115,20 @@ export class GoogleSheetsEmployeeRepository implements EmployeeRepository {
 
     const worksheet = googleSpreadsheet.sheetsByIndex[0];
     this.rows = await worksheet.getRows();
+  }
+
+  private createTransportBenefit(
+    row: GoogleSpreadsheetRow,
+    name: string,
+  ): Benefit {
+    const benefit = Benefit.create({
+      name,
+      value: convertCurrentMoneyInNumber(row[name].trim()),
+      type: 'Transport',
+      frequency: 'Daily',
+    }).value as Benefit;
+
+    return benefit;
   }
 
   private hasValue(rowValue: string) {
