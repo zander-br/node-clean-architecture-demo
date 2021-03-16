@@ -10,6 +10,14 @@ import { EmployeeRepository } from '@/usecases/ports/employee-repository';
 import { convertCurrentMoneyInNumber } from '@/shared/utils';
 import Benefit from '@/entities/employee/benefit';
 
+const TRANSPORTATION_BENEFITS = [
+  'BOM',
+  'BILHETE ÚNICO',
+  'BEN FÁCIL',
+  'BEM OSASCO',
+  'SIM MAUÁ',
+];
+
 export class GoogleSheetsEmployeeRepository implements EmployeeRepository {
   private rows: GoogleSpreadsheetRow[];
 
@@ -44,31 +52,13 @@ export class GoogleSheetsEmployeeRepository implements EmployeeRepository {
     const employeeOrError = Employee.create(employeeData);
     const employee = employeeOrError.value as Employee;
 
-    if (this.hasValue(employeeRow.BOM)) {
-      employee.addBenefit(this.createTransportBenefit(employeeRow, 'BOM'));
-    }
-
-    if (this.hasValue(employeeRow['BILHETE ÚNICO'])) {
-      employee.addBenefit(
-        this.createTransportBenefit(employeeRow, 'BILHETE ÚNICO'),
-      );
-    }
-
-    if (this.hasValue(employeeRow['BEN FÁCIL'])) {
-      employee.addBenefit(
-        this.createTransportBenefit(employeeRow, 'BEN FÁCIL'),
-      );
-    }
-
-    if (this.hasValue(employeeRow['BEM OSASCO'])) {
-      employee.addBenefit(
-        this.createTransportBenefit(employeeRow, 'BEM OSASCO'),
-      );
-    }
-
-    if (this.hasValue(employeeRow['SIM MAUÁ'])) {
-      employee.addBenefit(this.createTransportBenefit(employeeRow, 'SIM MAUÁ'));
-    }
+    TRANSPORTATION_BENEFITS.forEach(nameBenefit => {
+      if (this.hasValue(employeeRow[nameBenefit])) {
+        employee.addBenefit(
+          this.createTransportBenefit(employeeRow, nameBenefit),
+        );
+      }
+    });
 
     if (this.hasValue(employeeRow['VR AUTO'])) {
       const benefit = Benefit.create({
