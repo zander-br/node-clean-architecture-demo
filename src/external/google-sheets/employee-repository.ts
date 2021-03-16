@@ -1,5 +1,6 @@
 import {
   GoogleSpreadsheet,
+  GoogleSpreadsheetRow,
   ServiceAccountCredentials,
 } from 'google-spreadsheet';
 
@@ -10,20 +11,22 @@ import { convertCurrentMoneyInNumber } from '@/shared/utils';
 import Benefit from '@/entities/employee/benefit';
 
 export class GoogleSheetsEmployeeRepository implements EmployeeRepository {
+  private rows: GoogleSpreadsheetRow[];
+
   constructor(
     private readonly spreadSheetId: string,
     private credentials: ServiceAccountCredentials,
   ) {}
 
   async findByName(name: string): Promise<Employee> {
-    const googleSpreadsheet = new GoogleSpreadsheet(this.spreadSheetId);
-    await googleSpreadsheet.useServiceAccountAuth(this.credentials);
-    await googleSpreadsheet.loadInfo();
+    if (!this.rows) {
+      await this.loadRows();
+    }
 
-    const worksheet = googleSpreadsheet.sheetsByIndex[0];
-    const rows = await worksheet.getRows();
+    const employeeRow = this.rows.find(
+      row => row['NOME COMPLETO'].trim() === name,
+    );
 
-    const employeeRow = rows.find(row => row['NOME COMPLETO'].trim() === name);
     if (!employeeRow) {
       return null;
     }
@@ -132,6 +135,15 @@ export class GoogleSheetsEmployeeRepository implements EmployeeRepository {
     }
 
     return employee;
+  }
+
+  private async loadRows() {
+    const googleSpreadsheet = new GoogleSpreadsheet(this.spreadSheetId);
+    await googleSpreadsheet.useServiceAccountAuth(this.credentials);
+    await googleSpreadsheet.loadInfo();
+
+    const worksheet = googleSpreadsheet.sheetsByIndex[0];
+    this.rows = await worksheet.getRows();
   }
 
   private hasValue(rowValue: string) {
